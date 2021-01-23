@@ -1,0 +1,265 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Roboto;
+}
+
+.header {
+  background-color: #f4f4f4;
+  padding: 0.25rem;
+  width: 100%;
+}
+
+.container {
+  width: 100%;
+  display: grid;
+}
+
+.loading,
+.processingContainer,
+.botContainer {
+  padding: 0.25rem;
+}
+
+/* .processingContainer {
+  display: grid;
+  grid-template-rows: 1fr 4fr;
+} */
+
+.query-form {
+  margin-bottom: 1rem;
+}
+
+.mr-4 {
+  margin-right: 1rem;
+}
+
+.start-btn,
+.abort-btn {
+  margin-bottom: 1rem;
+  padding: 0.4rem 0;
+  text-align: center;
+  text-decoration: none;
+  color: white;
+}
+
+.start-btn {
+  background-color: #57588d;
+}
+
+.abort-btn {
+  background-color: #b14949;
+  display: none;
+}
+
+.n-results {
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.status-msg {
+  color: red;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+#nomes {
+  list-style: decimal;
+}
+
+.baixados {
+  font-size: 1.2rem;
+}
+
+.progressbar-container {
+  width: 100%;
+  height: 25px;
+  border: black 1px solid;
+  margin-bottom: 1rem;
+}
+
+.progressbar {
+  height: 25px;
+  background-color: blue;
+  transition: 0.5s;
+}
+
+.img-container {
+  max-width: 100%;
+  position: relative;
+  margin-bottom: 0.25rem;
+  margin-right: 0.25rem;
+}
+
+.img-preview {
+  width: 100%;
+  height: auto;
+  width: auto;
+  max-height: 600px;
+  max-width: 500px;
+}
+
+.imagens {
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.loading {
+  display: none;
+  justify-items: center;
+}
+
+.file-select-container {
+  margin-bottom: 1rem;
+}
+
+.file-select {
+  padding: 0.5rem;
+  width: 150px;
+}
+
+.file-list-btn {
+  background-color: rgb(23, 0, 128);
+}
+
+.btn {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* The actual popup */
+.popup .popuptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -80px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class - hide and show the popup */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;} 
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
+}
+
+.fa-thumbs-up {
+  margin-left: 0.25rem;
+}
+
+.processing-menu {
+  display: grid;
+  grid-template-columns: 1fr 2fr 4fr;
+}
+
+.botoes {
+  grid-column: 1 / span 3;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 2fr;
+  grid-gap: 0.25rem;
+}
+
+.param-input-form {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.param-input-form-item {
+  display: flex;
+}
+
+.cols-input,
+.rows-input,
+.icols-input,
+.irows-input {
+  height: 100%
+}
+
+.fas {
+  margin-right: 0.5rem
+}
+
+input[type='checkbox'] {
+  transform: scale(1.5);
+  margin-left: 0.33rem;
+  margin-right: 0.33rem;
+}
+
+@media only screen and (max-width: 925px) {
+  .processing-menu {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .file-select-container {
+    margin-bottom: 1rem;
+    grid-column: 2 / span 2;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .param-input-form {
+    grid-column: 1 / span 3;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .param-input-form {
+    grid-column: 1 / span 3;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media only screen and (max-width: 405px) {
+  .file-select-container {
+    margin-bottom: 1rem;
+    grid-column: 2 / span 2;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+  }
+}

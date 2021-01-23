@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.2.0/lib/p5.js"></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+  <link rel="stylesheet" href="style.css">
+  <title>met-museum-bot</title>
+</head>
+<body>
+  <div class="header">
+    <button class="btn btn-primary routerprocessing">Processing</button>
+    <button class="btn btn-secondary routerdownloader">Downloader Bot</button>
+  </div>
+  <div class="botContainer" style="display: none">
+    <h1>metmuseum.org API</h1>
+    <h3 class="informacoes"></h3>
+    <div class="container">
+      <div class="query-form">
+        <label class="mr-4">Query:</label>
+        <input id="query-input" type="text">
+      </div>
+      <button class="start-btn" type="button">Iniciar download</button>
+      <button class="abort-btn" type="button">Interromper</button>
+      <div class="baixados"></div>
+      <div class="progressbar-container" style="display: none">
+        <div class="progressbar" style="width: 0px"></div>
+      </div>
+      <div class="status-msg"></div>
+      <div class="itemslist">
+        <div class="n-objetos"></div>
+        <div class="n-imagens"></div>
+        <ul id="nomes"></ul>
+      </div>
+    </div>
+  </div>
+  <div class="processingContainer">
+    <!-- <button class="btn btn-primary run-process">Iniciar processing</button> -->
+    <div class="processing-menu">
+      <div>
+        <button class="btn btn-primary mb-2 atualizar-files file-list-btn">Carregar</button>
+      </div>
+      <div class="file-select-container">
+        <button class="btn btn-secondary btn-anterior file-list-btn"><i class="fas fa-arrow-left"></i></button>
+        <select class="file-select"></select>
+        <button class="btn btn-secondary btn-proximo file-list-btn"><i class="fas fa-arrow-right"></i></button>
+      </div>
+      <div class="input-group mb-3 param-input-form">
+        <div class="param-input-form-item">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Cols</span>
+          </div>
+          <input type="text" class="form-control cols-input" placeholder="1" aria-label="cols" aria-describedby="basic-addon1">
+        </div>
+        <div class="param-input-form-item">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Rows</span>
+          </div>
+          <input type="text" class="form-control rows-input" placeholder="1" aria-label="rows" aria-describedby="basic-addon1">
+        </div>
+        <div class="param-input-form-item">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">iCols</span>
+            <div class="popup">
+              <span class="popuptext" id="myPopup">Número ímpar?<i class="fas fa-thumbs-up"></i></span>
+            </div>
+          </div>
+          <input type="text" class="form-control icols-input" placeholder="1" aria-label="cols" aria-describedby="basic-addon1">
+        </div>
+        <div class="param-input-form-item">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">iRows</span>
+            <div class="popup">
+              <span class="popuptext" id="myPopup">Número ímpar?<i class="fas fa-thumbs-up"></i></span>
+            </div>
+          </div>
+          <input type="text" class="form-control irows-input" placeholder="1" aria-label="rows" aria-describedby="basic-addon1">
+        </div>
+      </div>
+      <div class="botoes">
+          <div>
+            <input type="checkbox" class="flip-vertical">Flip vertical
+          </div>
+          <button class="btn btn-primary preview-processed-img"><i class="fas fa-eye"></i>Preview</button>
+          <button class="btn btn-primary crop-btn"><i class="fas fa-crop"></i>Crop</button>
+          <button class="btn btn-secondary loading-crop-btn" style="display: none" id=""><i class="fas fa-spinner"></i>Croppping...</button>
+          <button class="btn btn-danger save-processed-img" id=""><i class="fas fa-paint-brush"></i>Processing</button>
+          <button class="btn btn-secondary loading-mirror-btn" style="display: none" id=""><i class="fas fa-spinner"></i>Processando...</button>
+          <div></div>
+      </div>
+    </div>
+    <div class="imagens">
+      <div class="img-container">
+        <img oncontextmenu="return false" src="" alt="" class="img-preview">
+      </div>
+      <div id="processada-container"></div>
+    </div>
+  </div>
+  <div class="loading"><h1>Carregando...</h1></div>
+  <script src="index.js"></script>
+  <script src="p5.js"></script>
+  <script src="crop.js"></script>
+</body>
+</html>
