@@ -26,25 +26,31 @@ int j;
 int m;
 int n;
 
+int xOffSet;
+int yOffSet;
+
+int widthDiff;
+int heightDiff;
+
 public void settings() {
-  size(parseInt(args[2]), parseInt(args[3]));
+  size(19055, 15245);
 }
  
 void setup() {
   frameRate(0.1);
-  if (args != null) {
-    filename = args[0];
-    filename_to_save = args[1];
-    cols = parseInt(args[4]);
-    rows = parseInt(args[5]);
-    iCols = parseInt(args[6]);
-    iRows = parseInt(args[7]);
-    flipVertical = parseBoolean(args[8]);
-  };
+  //if (args != null) {
+    filename = "C:/Users/dpsig/dev/met-museum-bot/static/files/208554_0.jpg";
+    filename_to_save = "C:/Users/dpsig/dev/met-museum-bot/output/mirror/208554_0-1611586533500.jpg";
+    cols = 5;
+    rows = 5;
+    iCols = 5;
+    iRows = 5;
+    flipVertical = true;
+  //};
   img = loadImage(filename);
 
-  squareW = parseInt(args[2])/(cols * iCols);
-  squareH = parseInt(args[3])/(rows * iRows);
+  squareW = 19055/(cols * iCols);
+  squareH = 15245/(rows * iRows);
 }
 
 void draw() {

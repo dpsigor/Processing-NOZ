@@ -13,38 +13,39 @@ module.exports = (app) => {
       const ext = previewedFilename.split('.').pop();
       const mirrorFilename = rootFolder + '/output/mirror/' + filenameSemExt + '-' + new Date().valueOf() + '.' + ext;
       const filename = rootFolder + '/static/files/' + previewedFilename;
-      const normalizedWidth = (Math.floor(originalWidth/(cols*iCols)))*cols*iCols;
-      const normalizedHeight = (Math.floor(originalHeight/(rows*iRows)))*rows*iRows;
+      const finalWidth = Math.floor(originalWidth/cols)*cols * iCols;
+      const finalHeight = Math.floor(originalHeight/rows)*rows * iRows;
 
       // console.log(req.body)
-      console.log(`processing-java --sketch=${rootFolder}/static/processing/mirror --run`, filename, mirrorFilename, normalizedWidth, normalizedHeight, cols, rows, iCols, iRows, flipVertical)
+      console.log(`processing-java --sketch=${rootFolder}/static/processing/mirror --run`, filename, mirrorFilename, finalWidth, finalHeight, cols, rows, iCols, iRows, flipVertical)
 
-      // const child = spawn('processing-java', [
-      //   `--sketch=${rootFolder}/static/processing/mirror`,
-      //   '--run',
-      //   filename,
-      //   mirrorFilename,
-      //   normalizedWidth,
-      //   normalizedHeight,
-      //   cols,
-      //   rows,
-      //   iCols,
-      //   iRows,
-      //   flipVertical
-      // ]);
+      const child = spawn('processing-java', [
+        `--sketch=${rootFolder}/static/processing/mirror`,
+        '--run',
+        filename,
+        mirrorFilename,
+        finalWidth,
+        finalHeight,
+        cols,
+        rows,
+        iCols,
+        iRows,
+        flipVertical
+      ]);
 
-      // // child.stdout.on('data', (data) => { });
-      // child.stderr.setEncoding('utf8');
-      // child.stderr.on('data', function (data) {
-      //   return res.status(200).send('failed');
-      // });
+      // child.stdout.on('data', (data) => { });
+      child.stderr.setEncoding('utf8');
+      child.stderr.on('data', function (data) {
+        console.log(data);
+        return res.status(200).send('failed');
+      });
 
-      // child.stdout.on('close', (code) => {
-      //   return res.status(200).send('mirror_' + previewedFilename);
-      // });
-      res.status(200).send('alou')
+      child.stdout.on('close', (code) => {
+        return res.status(200).send('mirror_' + previewedFilename);
+      });
+      // res.status(200).send('alou')
     } else {
-      res.status(200).send('Inválido número de args');
+      return res.status(200).send('Inválido número de args');
     }
   });
 

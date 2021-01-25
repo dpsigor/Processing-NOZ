@@ -1,6 +1,6 @@
 const cropBtn = document.querySelector('.crop-btn');
+const loadingCropBtn = document.querySelector('.loading-crop-btn');
 cropBtn.addEventListener('click', () => onCropImg());
-
 
 let x1 = 0;
 let y1 = 0;
@@ -41,8 +41,10 @@ const onCropImg = () => {
   let APIy1 = Math.round(y1*imgPreview.naturalHeight/imgPreview.clientHeight);
   let APIx2 = Math.round(x2*imgPreview.naturalWidth/imgPreview.clientWidth);
   let APIy2 = Math.round(y2*imgPreview.naturalHeight/imgPreview.clientHeight);
-  processingContainer.setAttribute("style", "display: none");
-  loadingContainer.setAttribute("style", "display: grid");
+  cropBtn.setAttribute("style", "display: none");
+  loadingCropBtn.setAttribute("style", "display: block");
+  // processingContainer.setAttribute("style", "display: none");
+  // loadingContainer.setAttribute("style", "display: grid");
   const fileSelect = document.querySelector('.file-select');
   const filename = fileSelect.value;
   axios.post(apiUrl + 'processing/crop', {
@@ -52,6 +54,8 @@ const onCropImg = () => {
     x2: APIx2,
     y2: APIy2,
   }).then((res) => {
+    loadingCropBtn.setAttribute("style", "display: none");
+    cropBtn.setAttribute("style", "display: block");
     const newFilename = res.data;
     const opt = document.createElement('option');
     opt.appendChild(document.createTextNode(newFilename));
@@ -64,5 +68,9 @@ const onCropImg = () => {
     processingContainer.setAttribute("style", "display: block");
     loadingContainer.setAttribute("style", "display: none");
     x1 = 0; y1 = 0; x2 = 0; y2 = 0;
+  }).catch(err => {
+    console.log(err);
+    loadingCropBtn.setAttribute("style", "display: none");
+    cropBtn.setAttribute("style", "display: block");
   });
 }
