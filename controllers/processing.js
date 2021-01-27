@@ -1,7 +1,6 @@
 const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const { nextTick } = require('process');
 
 module.exports = (app) => {
   app.post('/api/processing/run', async (req, res) => {
@@ -23,35 +22,27 @@ module.exports = (app) => {
       // const finalWidth = Math.floor(originalWidth/cols)*cols * iCols;
       // const finalHeight = Math.floor(originalHeight/rows)*rows * iRows;
 
-      console.log(`processing-java --sketch=${rootFolder}/static/processing/mirror --run`, inputFilename, outputPath, filenameSemExt, canvasW, canvasH, cols, rows, iCols, iRows, flipVertical)
-
-      const child = spawn('processing-java', [
-        `--sketch=${rootFolder}/static/processing/mirror`,
-        '--run',
-        inputFilename,
-        outputPath,
-        filenameSemExt,
-        canvasW,
-        canvasH,
-        cols,
-        rows,
-        iCols,
-        iRows,
-        flipVertical
-      ]);
-
-      // child.stdout.on('data', (data) => { });
-      child.stderr.setEncoding('utf8');
-      child.stderr.on('data', function (data) {
-        console.log(data);
-        if (data.includes('heap space')) { return res.status(200).send('Memória insuficiente') };
-        return res.status(200).send('failed');
-      });
-
-      child.stdout.on('close', (code) => {
-        return res.status(200).send('ok');
-      });
-      // res.status(200).send('alou')
+      console.log(`processing-java --sketch=${rootFolder}/static/processing/mirror --run`, inputFilename, outputPath, filenameSemExt, canvasW, canvasH, cols, rows, iCols, iRows, flipVertical);
+      try {
+        await mirrorPreview(inputFilename, outputPath, filenameSemExt, canvasW, canvasH, cols, rows, iCols, iRows, flipVertical, rootFolder);
+        const resolve = await mirror(inputFilename, outputPath, filenameSemExt, canvasW, canvasH, cols, rows, iCols, iRows, flipVertical, rootFolder);
+        fs.writeFileSync(
+          path.join(outputPath, 'info.txt'),
+          `obj: ${filenameSemExt}\n
+          cols: ${cols}\n
+          rows: ${rows}\n
+          iCols: ${iCols}\n
+          iRows: ${iRows}\n
+          Tamanho original: ${originalWidth} por ${originalHeight}\n
+          Tamanho do modulo: ${moduleW} por ${moduleH}\n
+          Tamanho total, ao juntar os modulos no photoshop: ${moduleW*cols} por ${moduleH*rows}\n
+          `,
+          'utf-8'
+        );
+        res.status(200).send(resolve);
+      } catch (error) {
+        res.status(200).send(error);
+      }
     } else {
       return res.status(200).send('Inválido número de args');
     }
@@ -101,3 +92,63 @@ module.exports = (app) => {
     }
   });
 };
+
+const mirror = (inputFilename, outputPath, filenameSemExt, canvasW, canvasH, cols, rows, iCols, iRows, flipVertical, rootFolder) => {
+  return new Promise ((resolve, reject) => {
+    const child = spawn('processing-java', [
+      `--sketch=${rootFolder}/static/processing/mirror`,
+      '--run',
+      inputFilename,
+      outputPath,
+      filenameSemExt,
+      canvasW,
+      canvasH,
+      cols,
+      rows,
+      iCols,
+      iRows,
+      flipVertical
+    ]);
+  
+    // child.stdout.on('data', (data) => { });
+    child.stderr.setEncoding('utf8');
+    child.stderr.on('data', function (data) {
+      console.log(data);
+      if (data.includes('heap space')) { reject('Memória insuficiente') };
+      reject('failed')
+    });
+  
+    child.stdout.on('close', (code) => {
+      resolve('ok');
+    });
+  })
+}
+
+const mirrorPreview = (inputFilename, outputPath, filenameSemExt, canvasW, canvasH, cols, rows, iCols, iRows, flipVertical, rootFolder) => {
+  return new Promise ((resolve, reject) => {
+    const child = spawn('processing-java', [
+      `--sketch=${rootFolder}/static/processing/mirrorpreview`,
+      '--run',
+      inputFilename,
+      outputPath,
+      filenameSemExt,
+      canvasW,
+      canvasH,
+      cols,
+      rows,
+      iCols,
+      iRows,
+      flipVertical
+    ]);
+  
+    child.stderr.setEncoding('utf8');
+    child.stderr.on('data', function (data) {
+      console.log(data);
+      reject('Houve um erro no preview')
+    });
+  
+    child.stdout.on('close', (code) => {
+      resolve(true);
+    });
+  })
+}

@@ -14,9 +14,10 @@ int i;
 int j;
 int m;
 int n;
+float scaling;
 
 public void settings() {
-  size(parseInt(args[3]), parseInt(args[4]));
+  size(parseInt(10000), parseInt(10000));
 }
  
 void setup() {
@@ -33,19 +34,37 @@ void setup() {
   };
   img = loadImage(inputFilename);
 
-  squareW = parseInt(img.width/(cols*iCols))*iCols;
-  squareH = parseInt(img.height/(rows*iRows))*iRows;
+  if (img.width * iCols > img.height * iRows && img.width * iCols > 10000) {
+    scaling = 10000f/(parseFloat(img.width * iCols));
+  } else if (img.height * iRows > img.width * iCols && img.height * iRows > 10000) {
+    scaling = 10000f/(parseFloat(img.height * iRows));
+  } else {
+    scaling = 1;
+  }
+  
+  squareW = parseInt((img.width/(cols*iCols))*iCols*scaling);
+  squareH = parseInt((img.height/(rows*iRows))*iRows*scaling);
 }
 
 void draw() {
   background(255);
-  int k = 0;
+  image(img, 0, 0, parseInt((int) Math.ceil(scaling*img.width)), parseInt((int) Math.ceil(scaling*img.height)));
+  
+  println("image on canvas: W", parseInt((int) Math.ceil(scaling*img.width)));
+  println("image on canvas: H", parseInt((int) Math.ceil(scaling*img.height)));
+  println("squareW", squareW);
+  println("squareH", squareH);
+  
   for (int i = 0; i < cols; ++i) {
     for (int j = 0; j < rows; ++j) {
-      image(img, 0, 0, img.width, img.height);
-      square = get(squareW*i, squareH*j, squareW, squareH);
+      square = get(squareW*(cols - i - 1), squareH*(rows - j - 1), squareW, squareH);
+      pushMatrix();
+      translate(squareW*(cols - i - 1)*iCols, squareH*(rows - j - 1)*iRows);
       for (int m = 0; m < iCols; ++m) {
         for (int n = 0; n < iRows; ++n) {
+          if (i == cols - 1) {
+            println("andou mais o interno:", m*squareW);
+          };
           pushMatrix();
           translate(m*squareW, n*squareH);
           if (m % 2 != 0 && n % 2 != 0 && flipVertical) {           // flip hor e ver
@@ -72,11 +91,10 @@ void draw() {
           popMatrix();
         }
       }
-      square = get(0, 0, squareW*iCols, squareH*iRows);
-      square.save(outputPath + "module_" + k + ".png");
-      ++k;
+      popMatrix();
     }
   }
-  // save(outputPath + filenameSemExt + ".png");
+  img = get(0, 0, parseInt((int) squareW * cols * iCols), parseInt((int) squareH * rows * iRows));
+  img.save(outputPath + "preview.png");
   exit();
 }

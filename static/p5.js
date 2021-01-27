@@ -7,6 +7,7 @@ document.querySelector('.flip-vertical').checked = false;
 let sketch;
 
 let img;
+let img_to_save;
 
 let originalWidth;
 let originalHeight;
@@ -68,6 +69,7 @@ const s = (p) => {
         p.pop();
       }
     }
+    img_to_save = p.get(0, 0, squareW*iCols, squareH*iRows);
   }
 }
 
@@ -97,6 +99,7 @@ saveProcessedBtn.addEventListener('click', () => {
   loadingProcessBtn.setAttribute("style", "display: block");
   if (document.querySelector(".dynamic-crop")) { document.querySelector(".dynamic-crop").remove(); }
   axios.post(apiUrl + 'processing/run', { previewedFilename, originalWidth, originalHeight, cols, rows, iCols, iRows, flipVertical })
-    .then(res => { alert(res.data); saveProcessedBtn.setAttribute("style", "display: block"); loadingProcessBtn.setAttribute("style", "display: none"); })
-    .catch(err => { alert(err); saveProcessedBtn.setAttribute("style", "display: block"); loadingProcessBtn.setAttribute("style", "display: none"); })
+    .then(res => { alert(res.data); console.log(res); saveProcessedBtn.setAttribute("style", "display: block"); loadingProcessBtn.setAttribute("style", "display: none"); })
+    .catch(err => { console.log(err); alert(err.message); saveProcessedBtn.setAttribute("style", "display: block"); loadingProcessBtn.setAttribute("style", "display: none"); })
 });
+
