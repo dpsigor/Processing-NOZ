@@ -9,6 +9,7 @@
 // args[7] -> número de linhas interas
 // args[8] = Flipar? true ou false
 
+PGraphics big;
 PImage img;
 PImage square;
 // PImage to_save;
@@ -33,10 +34,11 @@ int widthDiff;
 int heightDiff;
 
 public void settings() {
-  size(19055, 15245);
+  size(100, 100);
 }
  
 void setup() {
+  big = createGraphics(19055, 15245, JAVA2D);
   frameRate(0.1);
   //if (args != null) {
     filename = "C:/Users/dpsig/dev/met-museum-bot/static/files/208554_0.jpg";
@@ -54,45 +56,47 @@ void setup() {
 }
 
 void draw() {
-  background(255);
-  image(img, 0, 0, img.width, img.height);
+  big.beginDraw();
+  big.background(255);
+  big.image(img, 0, 0, img.width, img.height);
   for (int i = 0; i < cols; ++i) {
     for (int j = 0; j < rows; ++j) {
-      square = get(squareW*(cols - i - 1), squareH*(rows - j - 1), squareW, squareH);
-      pushMatrix();
-      translate(squareW*(cols - i - 1)*iCols, squareH*(rows - j - 1)*iRows);
+      square = big.get(squareW*(cols - i - 1), squareH*(rows - j - 1), squareW, squareH);
+      big.pushMatrix();
+      big.translate(squareW*(cols - i - 1)*iCols, squareH*(rows - j - 1)*iRows);
       // image(square, 0, 0, squareW, squareH);
       for (int m = 0; m < iCols; ++m) {
         for (int n = 0; n < iRows; ++n) {
-          pushMatrix();
-          translate(m*squareW, n*squareH);
+          big.pushMatrix();
+          big.translate(m*squareW, n*squareH);
           if (m % 2 != 0 && n % 2 != 0 && flipVertical) {           // flip hor e ver
-            pushMatrix();
-            translate(squareW, squareH);
-            scale(-1, -1);
-            image(square, 0, 0, squareW, squareH);
-            popMatrix();
+            big.pushMatrix();
+            big.translate(squareW, squareH);
+            big.scale(-1, -1);
+            big.image(square, 0, 0, squareW, squareH);
+            big.popMatrix();
           } else if (m % 2 != 0) {                                  // flip apenas hor
-            pushMatrix();
-            translate(squareW, 0);
-            scale(-1, 1);
-            image(square, 0, 0, squareW, squareH);
-            popMatrix();
+            big.pushMatrix();
+            big.translate(squareW, 0);
+            big.scale(-1, 1);
+            big.image(square, 0, 0, squareW, squareH);
+            big.popMatrix();
           } else if (n % 2 != 0 && flipVertical) {                  // flip apenas vertical
-            pushMatrix();
-            translate(0, squareH);
-            scale(1, -1);
-            image(square, 0, 0, squareW, squareH);
-            popMatrix();
+            big.pushMatrix();
+            big.translate(0, squareH);
+            big.scale(1, -1);
+            big.image(square, 0, 0, squareW, squareH);
+            big.popMatrix();
           } else {                                                  // não flip
-            image(square, 0, 0, squareW, squareH);
+            big.image(square, 0, 0, squareW, squareH);
           }
-          popMatrix();
+          big.popMatrix();
         }
       }
-      popMatrix();
+      big.popMatrix();
     }
   }
-  save(filename_to_save);
+  big.endDraw();
+  big.save(filename_to_save);
   exit();
 }

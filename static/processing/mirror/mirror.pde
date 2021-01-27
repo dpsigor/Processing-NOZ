@@ -12,8 +12,9 @@
 PImage img;
 PImage square;
 // PImage to_save;
-String filename;
-String filename_to_save;
+String inputFilename;
+String outputPath;
+String filenameSemExt;
 int cols;
 int rows;
 int iCols;
@@ -27,24 +28,25 @@ int m;
 int n;
 
 public void settings() {
-  size(parseInt(args[2]), parseInt(args[3]));
+  size(parseInt(args[3]), parseInt(args[4]));
 }
  
 void setup() {
   frameRate(0.1);
   if (args != null) {
-    filename = args[0];
-    filename_to_save = args[1];
-    cols = parseInt(args[4]);
-    rows = parseInt(args[5]);
-    iCols = parseInt(args[6]);
-    iRows = parseInt(args[7]);
-    flipVertical = parseBoolean(args[8]);
+    inputFilename = args[0];
+    outputPath = args[1];
+    filenameSemExt = args[2];
+    cols = parseInt(args[5]);
+    rows = parseInt(args[6]);
+    iCols = parseInt(args[7]);
+    iRows = parseInt(args[8]);
+    flipVertical = parseBoolean(args[9]);
   };
-  img = loadImage(filename);
+  img = loadImage(inputFilename);
 
-  squareW = parseInt(args[2])/(cols * iCols);
-  squareH = parseInt(args[3])/(rows * iRows);
+  squareW = parseInt(img.width)/(cols);
+  squareH = parseInt(img.height)/(rows);
 }
 
 void draw() {
@@ -87,6 +89,6 @@ void draw() {
       popMatrix();
     }
   }
-  save(filename_to_save);
+  save(outputPath + filenameSemExt + ".png");
   exit();
 }

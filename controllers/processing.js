@@ -11,21 +11,28 @@ module.exports = (app) => {
       const rootFolder = path.join(__dirname, '..').split(/\/|\\/).join('/');
       const filenameSemExt = previewedFilename.split('.').slice(0, -1).join('.');
       const ext = previewedFilename.split('.').pop();
-      const mirrorFilename = rootFolder + '/output/mirror/' + filenameSemExt + '-' + new Date().valueOf() + '.' + ext;
-      const filename = rootFolder + '/static/files/' + previewedFilename;
-      const finalWidth = Math.floor(originalWidth/cols)*cols * iCols;
-      const finalHeight = Math.floor(originalHeight/rows)*rows * iRows;
+      const outputPath = rootFolder + '/output/mirror/' + filenameSemExt + '/_' + new Date().valueOf() + '/';
+      const inputFilename = rootFolder + '/static/files/' + previewedFilename;
+      const squareW = Math.floor(originalWidth/cols);
+      const squareH = Math.floor(originalHeight/rows);
+      const moduleW = squareW*iCols;
+      const moduleH = squareH*iRows;
+      const canvasW = moduleW > originalWidth ? moduleW : originalWidth;
+      const canvasH = moduleH > originalHeight ? moduleH : originalHeight;
 
-      // console.log(req.body)
-      console.log(`processing-java --sketch=${rootFolder}/static/processing/mirror --run`, filename, mirrorFilename, finalWidth, finalHeight, cols, rows, iCols, iRows, flipVertical)
+      // const finalWidth = Math.floor(originalWidth/cols)*cols * iCols;
+      // const finalHeight = Math.floor(originalHeight/rows)*rows * iRows;
+
+      console.log(`processing-java --sketch=${rootFolder}/static/processing/mirror --run`, inputFilename, outputPath, filenameSemExt, canvasW, canvasH, cols, rows, iCols, iRows, flipVertical)
 
       const child = spawn('processing-java', [
         `--sketch=${rootFolder}/static/processing/mirror`,
         '--run',
-        filename,
-        mirrorFilename,
-        finalWidth,
-        finalHeight,
+        inputFilename,
+        outputPath,
+        filenameSemExt,
+        canvasW,
+        canvasH,
         cols,
         rows,
         iCols,
@@ -37,11 +44,12 @@ module.exports = (app) => {
       child.stderr.setEncoding('utf8');
       child.stderr.on('data', function (data) {
         console.log(data);
+        if (data.includes('heap space')) { return res.status(200).send('Memória insuficiente') };
         return res.status(200).send('failed');
       });
 
       child.stdout.on('close', (code) => {
-        return res.status(200).send('mirror_' + previewedFilename);
+        return res.status(200).send('ok');
       });
       // res.status(200).send('alou')
     } else {
