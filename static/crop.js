@@ -1,4 +1,4 @@
-const cropBtn = document.querySelector('.crop-btn');
+// const cropBtn = document.querySelector('.crop-btn');
 const loadingCropBtn = document.querySelector('.loading-crop-btn');
 const x1downBtn = document.getElementById('down-x1');
 const x2downBtn = document.getElementById('down-x2');
@@ -11,7 +11,7 @@ const y2upBtn = document.getElementById('up-y2');
 
 let timeOut;
 
-cropBtn.addEventListener('click', () => onCropImg());
+// cropBtn.addEventListener('click', () => onCropImg());
 
 let x1 = 0;
 let y1 = 0;

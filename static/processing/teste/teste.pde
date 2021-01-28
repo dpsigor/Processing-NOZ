@@ -1,3 +1,7 @@
+/*
+processing-java --force --sketch="C:/Users/dpsig/dev/met-museum-bot/static/processing/teste" --output="C:/Users/dpsig/dev/met-museum-bot/static/processing/teste/out" --run EAEMAN
+*/
+
 PImage venus;
 PImage teotokos;
 
@@ -18,7 +22,7 @@ void draw() {
   
   push();
   translate(width/2,height/2);
-  rotateY(radians(frameCount));
+  // rotateY(radians(frameCount));
   scale(0.5);
   
   noFill();
@@ -26,7 +30,8 @@ void draw() {
   stroke(0, 0, 255);
   box(900);
   noStroke();
-  
+
+  fill(0);
   translate(-width/2, 0, width/2);
   for (int x = 0; x < tiles; x++) {
     for (int y = 0; y < tiles; y++) {
@@ -36,7 +41,6 @@ void draw() {
       if (b > 0.5) { 
       push();
       translate(x*tileSize, y*tileSize - height/2);
-      fill(0);
       box(tileSize);
       pop();
       };
@@ -47,7 +51,6 @@ void draw() {
       push();
       rotateY(PI/2);
       translate(x*tileSize, y*tileSize - height/2);
-      fill(0);
       box(tileSize);
       pop();
       }
@@ -56,7 +59,6 @@ void draw() {
         push();
         rotateY(PI/2);
         translate(x*tileSize, y*tileSize - height/2, x*tileSize);
-        fill(0);
         box(tileSize);
         pop();  
       }
