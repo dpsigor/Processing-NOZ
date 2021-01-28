@@ -1,102 +1,67 @@
-// São oito argumentos no total
-// args[0] substituir pelo caminho do arquivo original: /Ursers/etc.../arquivo.png
-// args[1] substituir pelo caminho do arquivo a salvar: /Users/etc.../salvo.png -> se quiser salvar em jpg, por exemplo, colocaar .jpg ao invés de .png
-// args[2] substituir pela largura em pixels da imagem original vezes número de colunas
-// args[3] substituir pela altura em pixels da imagem original vezes número de linhas
-// args[4] -> número de colunas
-// args[5] -> número de linhas
-// args[6] -> número de colunas internas
-// args[7] -> número de linhas interas
-// args[8] = Flipar? true ou false
+PImage venus;
+PImage teotokos;
 
-PGraphics big;
-PImage img;
-PImage square;
-// PImage to_save;
-String filename;
-String filename_to_save;
-int cols;
-int rows;
-int iCols;
-int iRows;
-boolean flipVertical;
-int squareW;
-int squareH;
-int i;
-int j;
-int m;
-int n;
-
-int xOffSet;
-int yOffSet;
-
-int widthDiff;
-int heightDiff;
-
-public void settings() {
-  size(100, 100);
-}
- 
 void setup() {
-  big = createGraphics(19055, 15245, JAVA2D);
-  frameRate(0.1);
-  //if (args != null) {
-    filename = "C:/Users/dpsig/dev/met-museum-bot/static/files/208554_0.jpg";
-    filename_to_save = "C:/Users/dpsig/dev/met-museum-bot/output/mirror/208554_0-1611586533500.jpg";
-    cols = 5;
-    rows = 5;
-    iCols = 5;
-    iRows = 5;
-    flipVertical = true;
-  //};
-  img = loadImage(filename);
-
-  squareW = 19055/(cols * iCols);
-  squareH = 15245/(rows * iRows);
+  size(900, 900, P3D);
+  venus = loadImage("venus.gif");
+  venus.resize(900, 900);
+  venus.loadPixels();
+  teotokos = loadImage("teotokos.gif");
+  teotokos.resize(900,900);
+  teotokos.loadPixels();
 }
 
 void draw() {
-  big.beginDraw();
-  big.background(255);
-  big.image(img, 0, 0, img.width, img.height);
-  for (int i = 0; i < cols; ++i) {
-    for (int j = 0; j < rows; ++j) {
-      square = big.get(squareW*(cols - i - 1), squareH*(rows - j - 1), squareW, squareH);
-      big.pushMatrix();
-      big.translate(squareW*(cols - i - 1)*iCols, squareH*(rows - j - 1)*iRows);
-      // image(square, 0, 0, squareW, squareH);
-      for (int m = 0; m < iCols; ++m) {
-        for (int n = 0; n < iRows; ++n) {
-          big.pushMatrix();
-          big.translate(m*squareW, n*squareH);
-          if (m % 2 != 0 && n % 2 != 0 && flipVertical) {           // flip hor e ver
-            big.pushMatrix();
-            big.translate(squareW, squareH);
-            big.scale(-1, -1);
-            big.image(square, 0, 0, squareW, squareH);
-            big.popMatrix();
-          } else if (m % 2 != 0) {                                  // flip apenas hor
-            big.pushMatrix();
-            big.translate(squareW, 0);
-            big.scale(-1, 1);
-            big.image(square, 0, 0, squareW, squareH);
-            big.popMatrix();
-          } else if (n % 2 != 0 && flipVertical) {                  // flip apenas vertical
-            big.pushMatrix();
-            big.translate(0, squareH);
-            big.scale(1, -1);
-            big.image(square, 0, 0, squareW, squareH);
-            big.popMatrix();
-          } else {                                                  // não flip
-            big.image(square, 0, 0, squareW, squareH);
-          }
-          big.popMatrix();
-        }
+  background(#f1f1f1);
+  int tiles = 100;
+  float tileSize = width/tiles;
+  
+  push();
+  translate(width/2,height/2);
+  rotateY(radians(frameCount));
+  scale(0.5);
+  
+  noFill();
+  strokeWeight(1);
+  stroke(0, 0, 255);
+  box(900);
+  noStroke();
+  
+  translate(-width/2, 0, width/2);
+  for (int x = 0; x < tiles; x++) {
+    for (int y = 0; y < tiles; y++) {
+      color c = venus.pixels[int(x*tileSize) + int(y*tileSize)*height];
+      float b = map(brightness(c), 0, 255, 1, 0);
+      
+      if (b > 0.5) { 
+      push();
+      translate(x*tileSize, y*tileSize - height/2);
+      fill(0);
+      box(tileSize);
+      pop();
+      };
+      color tc = teotokos.pixels[int(x*tileSize) + int(y*tileSize)*height];
+      float tb = map(brightness(tc), 0, 255, 1, 0);
+      
+      if (tb > 0.5) { 
+      push();
+      rotateY(PI/2);
+      translate(x*tileSize, y*tileSize - height/2);
+      fill(0);
+      box(tileSize);
+      pop();
       }
-      big.popMatrix();
+      
+      if (b > 0.5 && tb > 0.5) {
+        push();
+        rotateY(PI/2);
+        translate(x*tileSize, y*tileSize - height/2, x*tileSize);
+        fill(0);
+        box(tileSize);
+        pop();  
+      }
+      
     }
   }
-  big.endDraw();
-  big.save(filename_to_save);
-  exit();
+  pop();
 }

@@ -7,10 +7,9 @@ document.querySelector('.flip-vertical').checked = false;
 let sketch;
 
 let img;
-let img_to_save;
 
-let originalWidth;
-let originalHeight;
+let originalW;
+let originalH;
 
 let previewedFilename;
 let clientWidth;
@@ -69,7 +68,6 @@ const s = (p) => {
         p.pop();
       }
     }
-    img_to_save = p.get(0, 0, squareW*iCols, squareH*iRows);
   }
 }
 
@@ -79,18 +77,25 @@ previewProcessedBtn.addEventListener('click', () => {
   originalImg = document.querySelector('.img-preview');
   if (!originalImg.clientWidth) { return }
   previewedFilename = document.querySelector('.file-select').value;
-  originalWidth = originalImg.naturalWidth;
-  originalHeight = originalImg.naturalHeight;
-  clientWidth = originalImg.clientWidth;
-  clientHeight = originalImg.clientHeight;
+  originalW = originalImg.naturalWidth;
+  originalH = originalImg.naturalHeight;
   cols = document.querySelector('.cols-input').value;
   rows = document.querySelector('.rows-input').value;
-  if (!cols || !rows) { return }
-  squareW = Math.floor(clientWidth/cols);
-  squareH = Math.floor(clientHeight/rows);
   iCols = document.querySelector('.icols-input').value;
   iRows = document.querySelector('.irows-input').value;
   flipVertical = document.querySelector('.flip-vertical').checked;
+  if (!cols || !rows) { return }
+
+  let scaling = 1;
+  if (originalW * iCols > originalH * iRows && originalW * iCols > 10000) {
+    scaling = 10000/(originalW * iCols);
+  } else if (originalH * iRows > originalW * iCols && originalH * iRows > 10000) {
+    scaling = 10000/(originalH * iRows);
+  }
+
+  squareW = Math.floor(Math.floor(originalW/(cols*iCols))*iCols*scaling);
+  squareH = Math.floor(Math.floor(originalH/(rows*iRows))*iRows*scaling);
+
   sketch = new p5(s, 'processada-container');
 })
 
@@ -98,7 +103,7 @@ saveProcessedBtn.addEventListener('click', () => {
   saveProcessedBtn.setAttribute("style", "display: none");
   loadingProcessBtn.setAttribute("style", "display: block");
   if (document.querySelector(".dynamic-crop")) { document.querySelector(".dynamic-crop").remove(); }
-  axios.post(apiUrl + 'processing/run', { previewedFilename, originalWidth, originalHeight, cols, rows, iCols, iRows, flipVertical })
+  axios.post(apiUrl + 'processing/run', { previewedFilename, originalW, originalH, cols, rows, iCols, iRows, flipVertical })
     .then(res => { alert(res.data); console.log(res); saveProcessedBtn.setAttribute("style", "display: block"); loadingProcessBtn.setAttribute("style", "display: none"); })
     .catch(err => { console.log(err); alert(err.message); saveProcessedBtn.setAttribute("style", "display: block"); loadingProcessBtn.setAttribute("style", "display: none"); })
 });

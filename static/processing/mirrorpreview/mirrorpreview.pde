@@ -49,12 +49,6 @@ void setup() {
 void draw() {
   background(255);
   image(img, 0, 0, parseInt((int) Math.ceil(scaling*img.width)), parseInt((int) Math.ceil(scaling*img.height)));
-  
-  println("image on canvas: W", parseInt((int) Math.ceil(scaling*img.width)));
-  println("image on canvas: H", parseInt((int) Math.ceil(scaling*img.height)));
-  println("squareW", squareW);
-  println("squareH", squareH);
-  
   for (int i = 0; i < cols; ++i) {
     for (int j = 0; j < rows; ++j) {
       square = get(squareW*(cols - i - 1), squareH*(rows - j - 1), squareW, squareH);
@@ -62,9 +56,6 @@ void draw() {
       translate(squareW*(cols - i - 1)*iCols, squareH*(rows - j - 1)*iRows);
       for (int m = 0; m < iCols; ++m) {
         for (int n = 0; n < iRows; ++n) {
-          if (i == cols - 1) {
-            println("andou mais o interno:", m*squareW);
-          };
           pushMatrix();
           translate(m*squareW, n*squareH);
           if (m % 2 != 0 && n % 2 != 0 && flipVertical) {           // flip hor e ver
