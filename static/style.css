@@ -196,7 +196,7 @@ body {
 .botoes {
   grid-column: 1 / span 3;
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr 2fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 2fr;
   grid-gap: 0.25rem;
 }
 
@@ -224,6 +224,11 @@ input[type='checkbox'] {
   transform: scale(1.5);
   margin-left: 0.33rem;
   margin-right: 0.33rem;
+}
+
+.crop-values {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
 }
 
 @media only screen and (max-width: 925px) {

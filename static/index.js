@@ -195,7 +195,12 @@ document.querySelector('.atualizar-files').addEventListener('click', () => {
     nFilesEmDisco = imgFilenames.length;
     const fileSelect = document.querySelector('.file-select');
     fileSelect.innerHTML = '';
-    fileSelect.addEventListener('change', () => { imgPreview.setAttribute("src", `../files/${fileSelect.value}`); })
+    fileSelect.addEventListener('change', () => {
+      imgPreview.setAttribute("src", `../files/${fileSelect.value}`);
+      const toDel = document.querySelector(".dynamic-crop");
+      if (toDel) { toDel.remove() };
+      x1 = 0; y1 = 0; x2 = 0; y2 = 0;
+    })
     imgFilenames.forEach(filename => {
       const opt = document.createElement('option');
       opt.appendChild(document.createTextNode(filename));

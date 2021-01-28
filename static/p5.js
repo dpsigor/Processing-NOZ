@@ -4,16 +4,21 @@ const saveProcessedBtn = document.querySelector('.save-processed-img');
 const loadingProcessBtn = document.querySelector('.loading-mirror-btn');
 document.querySelector('.flip-vertical').checked = false;
 
+let Px1
+let Py1
+let Px2
+let Py2
+
 let sketch;
 
 let img;
 
 let originalW;
 let originalH;
+let croppedW;
+let croppedH;
 
 let previewedFilename;
-let clientWidth;
-let clientHeight;
 let cols;
 let rows;
 let iCols;
@@ -31,7 +36,7 @@ const s = (p) => {
   
   p.draw = () => {
     p.background('#FF0000');
-    p.image(img, 0, 0, clientWidth, clientHeight);
+    p.image(img, -Px1, -Py1, originalW, originalH);
     for (i = 0; i < cols; ++i) {
       for (j = 0; j < rows; ++j) {
         square = p.get(squareW*(cols - i - 1), squareH*(rows - j - 1), squareW, squareH);
@@ -71,11 +76,9 @@ const s = (p) => {
   }
 }
 
-previewProcessedBtn.addEventListener('click', () => {
-  if (document.querySelector(".dynamic-crop")) { document.querySelector(".dynamic-crop").remove(); }
+const makeSketch = () => {
   if (sketch) { sketch.remove() }
   originalImg = document.querySelector('.img-preview');
-  if (!originalImg.clientWidth) { return }
   previewedFilename = document.querySelector('.file-select').value;
   originalW = originalImg.naturalWidth;
   originalH = originalImg.naturalHeight;
@@ -84,20 +87,33 @@ previewProcessedBtn.addEventListener('click', () => {
   iCols = document.querySelector('.icols-input').value;
   iRows = document.querySelector('.irows-input').value;
   flipVertical = document.querySelector('.flip-vertical').checked;
-  if (!cols || !rows) { return }
+  if (!cols || !rows || !iCols || !iRows) { return }
+
+  Px1 = Math.round(x1*originalW/originalImg.clientWidth);
+  Py1 = Math.round(y1*originalH/originalImg.clientHeight);
+  Px2 = Math.round(x2*originalW/originalImg.clientWidth);
+  Py2 = Math.round(y2*originalH/originalImg.clientHeight);
+
+  croppedW = Px2 - Px1;
+  croppedH = Py2 - Py1;
+  if (!croppedW || !croppedH) { croppedW = originalW; croppedH = originalH; };
 
   let scaling = 1;
-  if (originalW * iCols > originalH * iRows && originalW * iCols > 10000) {
-    scaling = 10000/(originalW * iCols);
-  } else if (originalH * iRows > originalW * iCols && originalH * iRows > 10000) {
-    scaling = 10000/(originalH * iRows);
+  if (croppedW * iCols > croppedH * iRows && croppedW * iCols > 10000) {
+    scaling = 10000/(croppedW * iCols);
+  } else if (croppedH * iRows > croppedW * iCols && croppedH * iRows > 10000) {
+    scaling = 10000/(croppedH * iRows);
   }
 
-  squareW = Math.floor(Math.floor(originalW/(cols*iCols))*iCols*scaling);
-  squareH = Math.floor(Math.floor(originalH/(rows*iRows))*iRows*scaling);
+  squareW = Math.floor(Math.floor(croppedW/(cols*iCols))*iCols*scaling);
+  squareH = Math.floor(Math.floor(croppedH/(rows*iRows))*iRows*scaling);
 
   sketch = new p5(s, 'processada-container');
-})
+}
+
+
+previewProcessedBtn.addEventListener('click', () => { makeSketch(); });
+
 
 saveProcessedBtn.addEventListener('click', () => {
   saveProcessedBtn.setAttribute("style", "display: none");
@@ -107,4 +123,3 @@ saveProcessedBtn.addEventListener('click', () => {
     .then(res => { alert(res.data); console.log(res); saveProcessedBtn.setAttribute("style", "display: block"); loadingProcessBtn.setAttribute("style", "display: none"); })
     .catch(err => { console.log(err); alert(err.message); saveProcessedBtn.setAttribute("style", "display: block"); loadingProcessBtn.setAttribute("style", "display: none"); })
 });
-
