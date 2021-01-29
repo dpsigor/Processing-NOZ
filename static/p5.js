@@ -76,6 +76,7 @@ const s = (p) => {
         p.pop();
       }
     }
+    p.noLoop();
   }
 }
 

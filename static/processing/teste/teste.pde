@@ -32,7 +32,7 @@ void setup() {
   teotokos.resize(900,900);
   teotokos.loadPixels();
   // frameRate(10);
-  tiles = 150;
+  tiles = 100;
   tileSize = width/tiles;
 
   for (int y = 0; y < tiles; y++) {
