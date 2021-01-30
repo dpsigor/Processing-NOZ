@@ -15,7 +15,8 @@
 <body>
   <div class="header">
     <button class="btn btn-secondary routerprocessing">Mirror</button>
-    <button class="btn btn-primary routerfatiar">Fatiar</button>
+    <button class="btn btn-secondary routerfatiar">Fatiar</button>
+    <button class="btn btn-primary routercatalogar">Catalogar</button>
     <button class="btn btn-secondary routerdownloader">Downloader Bot</button>
   </div>
   <div class="botContainer" style="display: none">
@@ -88,10 +89,10 @@
             <input type="checkbox" class="flip-vertical">Flip vertical
             
           </div>
-          <button class="btn btn-primary preview-processed-img"><i class="fas fa-eye"></i>Preview</button>
           <div class="lado-max-container">
-            Lado máximo<input type="number" class="lado-max" placeholder="10000">
+            Lado máximo:<input type="number" class="lado-max" placeholder="10000">
           </div>
+          <button class="btn btn-primary preview-processed-img"><i class="fas fa-eye"></i>Preview</button>
           <!-- <button class="btn btn-primary crop-btn"><i class="fas fa-crop"></i>Crop</button>
           <button class="btn btn-secondary loading-crop-btn" style="display: none" id=""><i class="fas fa-spinner"></i>Croppping...</button>
           <button class="btn btn-danger save-processed-img" id=""><i class="fas fa-paint-brush"></i>Processing</button>
@@ -120,7 +121,7 @@
       <div id="processada-container"></div>
     </div>
   </div>
-  <div class="fatiarContainer" style="display: grid">
+  <div class="fatiarContainer" style="display: none">
     <div class="fatiar-menu">
       <div>
         <button class="btn btn-primary mb-2 fatiar-atualizar-files file-list-btn"><i class="fas fa-sync"></i> Recarregar</button>
@@ -153,14 +154,29 @@
           <button class="btn btn-secondary" id="up-fy2"><i class="fas fa-arrow-up"></i></button>
         </div>
       </div>
-      <div>Nome: <input type="text" class="f-name"></div>
     </div>
+    <div style="margin-bottom: 0.25rem;">Nome da pasta ao salvar: <input type="text" class="f-name"></div>
     <div class="fatiar-img-container"><img oncontextmenu="return false" src="" alt="" class="fatiar-img-preview"></div>
+  </div>
+  <div class="catalogarContainer" style="display: grid">
+    <div class="catalogar-menu">
+      <div>
+        <button class="btn btn-primary mb-2 catalogar-atualizar-files file-list-btn"><i class="fas fa-sync"></i> Recarregar</button>
+      </div>
+      <div class="file-select-container">
+        Pastas não catalogadas: <select class="catalogar-file-select"></select>
+      </div>
+      <div>
+        <button class="btn btn-danger catalogar-btn"></button>
+      </div>
+    </div>
+    <div id="catalogar-canvas"></div>
   </div>
   <div class="loading"><h1>Carregando...</h1></div>
   <script src="index.js"></script>
-  <script src="p5.js"></script>
+  <script src="mirror.js"></script>
   <script src="fatiar.js"></script>
+  <script src="catalogar.js"></script>
   <script src="crop.js"></script>
 </body>
 </html>

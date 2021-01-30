@@ -25,11 +25,13 @@ const abortBtn = document.querySelector('.abort-btn');
 // const runBtn = document.querySelector('.run-process');
 const routeProcessingBtn = document.querySelector('.routerprocessing');
 const routeFatiarBtn = document.querySelector('.routerfatiar');
+const routeCatalogarBtn = document.querySelector('.routercatalogar');
 const routeDownloaderBtn = document.querySelector('.routerdownloader');
 const processingContainer = document.querySelector('.processingContainer');
 const loadingContainer = document.querySelector('.loading');
 const botContainer = document.querySelector('.botContainer');
 const fatiarContainer = document.querySelector('.fatiarContainer');
+const catalogarContainer = document.querySelector('.catalogarContainer');
 const colsInput = document.querySelector('.cols-input');
 const rowsInput = document.querySelector('.rows-input');
 const icolsInput = document.querySelector('.icols-input');
@@ -160,6 +162,7 @@ abortBtn.addEventListener('click', () => { onInterromper() });
 routeProcessingBtn.addEventListener('click', () => onRouteProcessing());
 routeDownloaderBtn.addEventListener('click', () => onRouteDownloader());
 routeFatiarBtn.addEventListener('click', () => onRouteFatiar());
+routeCatalogarBtn.addEventListener('click', () => onRouteCatalogar());
 colsInput.value = 1;
 rowsInput.value = 1;
 icolsInput.value = 1;
@@ -191,26 +194,32 @@ icolsInput.addEventListener('blur', () => {
 
 // Router
 const onRouteProcessing = () => {
+  baseRouting();
   routeProcessingBtn.setAttribute("class", "btn btn-primary routerprocessing");
-  routeFatiarBtn.setAttribute("class", "btn btn-secondary routerprocessing");
-  routeDownloaderBtn.setAttribute("class", "btn btn-secondary routerdownloader");
   processingContainer.setAttribute("style", "display: grid");
-  fatiarContainer.setAttribute("style", "display: none");
-  botContainer.setAttribute("style", "display: none");
 }
 const onRouteDownloader = () => {
-  routeProcessingBtn.setAttribute("class", "btn btn-secondary routerprocessing");
-  routeFatiarBtn.setAttribute("class", "btn btn-secondary routerprocessing");
+  baseRouting();
   routeDownloaderBtn.setAttribute("class", "btn btn-primary routerdownloader");
-  processingContainer.setAttribute("style", "display: none");
-  fatiarContainer.setAttribute("style", "display: none");
   botContainer.setAttribute("style", "display: grid");
 }
 const onRouteFatiar = () => {
-  routeProcessingBtn.setAttribute("class", "btn btn-secondary routerprocessing");
+  baseRouting();
   routeFatiarBtn.setAttribute("class", "btn btn-primary routerprocessing");
-  routeDownloaderBtn.setAttribute("class", "btn btn-secondary routerdownloader");
-  processingContainer.setAttribute("style", "display: none");
   fatiarContainer.setAttribute("style", "display: grid");
+}
+const onRouteCatalogar = () => {
+  baseRouting();
+  routeCatalogarBtn.setAttribute("class", "btn btn-primary routerprocessing");
+  catalogarContainer.setAttribute("style", "display: grid");
+}
+const baseRouting = () => {
+  routeProcessingBtn.setAttribute("class", "btn btn-secondary routerprocessing");
+  processingContainer.setAttribute("style", "display: none");
+  routeFatiarBtn.setAttribute("class", "btn btn-secondary routerprocessing");
+  fatiarContainer.setAttribute("style", "display: none");
+  routeCatalogarBtn.setAttribute("class", "btn btn-secondary routercatalogar");
+  catalogarContainer.setAttribute("style", "display: none");
+  routeDownloaderBtn.setAttribute("class", "btn btn-secondary routerdownloader");
   botContainer.setAttribute("style", "display: none");
 }

@@ -18,6 +18,7 @@ body {
 .loading,
 .processingContainer,
 .fatiarContainer,
+.catalogarContainer,
 .botContainer {
   padding: 0.25rem;
 }
@@ -117,6 +118,7 @@ body {
   margin-bottom: 1rem;
 }
 
+.catalogar-file-select,
 .file-select {
   padding: 0.5rem;
   width: 150px;
@@ -142,7 +144,6 @@ body {
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
-  margin-bottom: 0.5rem;
 }
 
 .f-loading {
@@ -221,12 +222,19 @@ body {
 .processing-menu {
   display: grid;
   grid-template-columns: 1fr 2fr 4fr;
+  max-width: 100vw;
+}
+
+.catalogar-menu {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  max-width: 100vw;
 }
 
 .botoes {
   grid-column: 1 / span 3;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 2fr;
+  grid-template-columns: 1fr 1fr 1fr 6fr 1fr;
   grid-gap: 0.25rem;
 }
 
@@ -267,6 +275,12 @@ input[type='checkbox'] {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.lado-max {
+  margin-left: 0.33rem;
+  padding: 0.5rem;
+  max-width: 100px;
 }
 
 @media only screen and (max-width: 925px) {

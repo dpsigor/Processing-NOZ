@@ -88,7 +88,7 @@ const clearFatiarBox = () => {
 }
 
 const makeGrid = () => {
-  if (fPixels >= 100) {
+  if (fPixels >= 100 && fPixels <= 600) {
     let scaleF = fatiarImg.clientWidth / fatiarImg.naturalWidth;
     fCols = Math.floor((fx2 - fx1)/(fPixels*scaleF));
     fRows = Math.floor((fy2 - fy1)/(fPixels*scaleF));
@@ -145,6 +145,9 @@ document.querySelector('.f-pixels-input').addEventListener('input', () => {
 document.querySelector('.f-pixels-input').addEventListener('blur', () => {
   if (document.querySelector('.f-pixels-input').value < 100) {
     document.querySelector('.f-pixels-input').value = 100;
+  }
+  if (document.querySelector('.f-pixels-input').value > 600) {
+    document.querySelector('.f-pixels-input').value = 600;
   }
   updateFatiarGrid();
 })

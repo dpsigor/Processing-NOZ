@@ -21,7 +21,7 @@ module.exports = app => {
 
 const fatiar = (rootFolder, groupname, filename, x1, y1, pixels, cols, rows) => {
   const inputFilePath = path.join(rootFolder, 'static', 'files', filename).split(/\/|\\/).join('/');
-  const outputPath = path.join(rootFolder, 'output', groupname).split(/\/|\\/).join('/');
+  const outputPath = path.join(rootFolder, 'output', 'modulos', groupname).split(/\/|\\/).join('/');
   console.log(`processing-java --sketch=${rootFolder}/static/processing/fatiar --run ${inputFilePath} ${outputPath} ${x1} ${y1} ${pixels} ${cols} ${rows}`);
   return new Promise ((resolve, reject) => {
     const child = spawn('processing-java', [
