@@ -35,9 +35,9 @@ const catS = (p) => {
       saturation += p.saturation(c);
       brightness += p.brightness(c);
     }
-    const avgHue = r/(p.pixels.length/4); values.push(parseInt(avgHue));
-    const avgSat = g/(p.pixels.length/4); values.push(parseInt(avgSat));
-    const avgBrg = b/(p.pixels.length/4); values.push(parseInt(avgBrg));
+    const avgHue = hue/(p.pixels.length/4); values.push(parseInt(avgHue));
+    const avgSat = saturation/(p.pixels.length/4); values.push(parseInt(avgSat));
+    const avgBrg = brightness/(p.pixels.length/4); values.push(parseInt(avgBrg));
     if (col < 2) { col++ }
     else if (row < 2) { row++; col = 0;}
     else {
