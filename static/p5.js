@@ -2,6 +2,10 @@ let originalImg = document.querySelector('.img-preview');
 const previewProcessedBtn = document.querySelector('.preview-processed-img');
 // const saveProcessedBtn = document.querySelector('.save-processed-img');
 const loadingProcessBtn = document.querySelector('.loading-mirror-btn');
+const imgContainer = document.querySelector('.img-container');
+const imgPreview = document.querySelector('.img-preview');
+
+
 document.querySelector('.flip-vertical').checked = false;
 document.querySelector('.lado-max').value = 10000;
 
@@ -131,3 +135,37 @@ previewProcessedBtn.addEventListener('click', () => { makeSketch(); });
 //     .then(res => { alert(res.data); console.log(res); saveProcessedBtn.setAttribute("style", "display: block"); loadingProcessBtn.setAttribute("style", "display: none"); })
 //     .catch(err => { console.log(err); alert(err.message); saveProcessedBtn.setAttribute("style", "display: block"); loadingProcessBtn.setAttribute("style", "display: none"); })
 // });
+
+// Select de files
+document.querySelector('.atualizar-files').addEventListener('click', () => {
+  axios.get(apiUrl + 'filelist').then(res => {
+    const imgFilenames = res.data;
+    nFilesEmDisco = imgFilenames.length;
+    const fileSelect = document.querySelector('.file-select');
+    fileSelect.innerHTML = '';
+    fileSelect.addEventListener('change', () => {
+      imgPreview.setAttribute("src", `../files/${fileSelect.value}`);
+      const toDel = document.querySelector(".dynamic-crop");
+      if (toDel) { toDel.remove() };
+      x1 = 0; y1 = 0; x2 = 0; y2 = 0;
+    })
+    imgFilenames.forEach(filename => {
+      const opt = document.createElement('option');
+      opt.appendChild(document.createTextNode(filename));
+      opt.value = filename;
+      fileSelect.appendChild(opt);
+    });
+    document.querySelector('.atualizar-files').innerHTML = '<i class="fas fa-sync"></i> Recarregar';
+    imgPreview.setAttribute("src", `../files/${fileSelect.value}`);
+  });
+});
+document.querySelector('.btn-anterior').addEventListener('click', () => {
+  const fileSelect = document.querySelector('.file-select');
+  if (fileSelect.selectedIndex > 0) { fileSelect.selectedIndex = fileSelect.selectedIndex - 1 };
+  imgPreview.setAttribute("src", `../files/${fileSelect.value}`);
+});
+document.querySelector('.btn-proximo').addEventListener('click', () => {
+  const fileSelect = document.querySelector('.file-select');
+  if (fileSelect.selectedIndex < nFilesEmDisco - 1) { fileSelect.selectedIndex = fileSelect.selectedIndex + 1 };
+  imgPreview.setAttribute("src", `../files/${fileSelect.value}`);
+});

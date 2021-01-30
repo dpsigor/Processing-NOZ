@@ -14,7 +14,8 @@
 </head>
 <body>
   <div class="header">
-    <button class="btn btn-primary routerprocessing">Processing</button>
+    <button class="btn btn-secondary routerprocessing">Mirror</button>
+    <button class="btn btn-primary routerfatiar">Fatiar</button>
     <button class="btn btn-secondary routerdownloader">Downloader Bot</button>
   </div>
   <div class="botContainer" style="display: none">
@@ -39,7 +40,7 @@
       </div>
     </div>
   </div>
-  <div class="processingContainer">
+  <div class="processingContainer" style="display: none">
     <!-- <button class="btn btn-primary run-process">Iniciar processing</button> -->
     <div class="processing-menu">
       <div>
@@ -70,7 +71,7 @@
               <span class="popuptext" id="myPopup">Número ímpar?<i class="fas fa-thumbs-up"></i></span>
             </div>
           </div>
-          <input type="text" class="form-control icols-input" placeholder="1" aria-label="cols" aria-describedby="basic-addon1">
+          <input type="text" class="form-control icols-input" placeholder="1" aria-label="icols" aria-describedby="basic-addon1">
         </div>
         <div class="param-input-form-item">
           <div class="input-group-prepend">
@@ -79,7 +80,7 @@
               <span class="popuptext" id="myPopup">Número ímpar?<i class="fas fa-thumbs-up"></i></span>
             </div>
           </div>
-          <input type="text" class="form-control irows-input" placeholder="1" aria-label="rows" aria-describedby="basic-addon1">
+          <input type="text" class="form-control irows-input" placeholder="1" aria-label="irows" aria-describedby="basic-addon1">
         </div>
       </div>
       <div class="botoes">
@@ -119,9 +120,46 @@
       <div id="processada-container"></div>
     </div>
   </div>
+  <div class="fatiarContainer" style="display: grid">
+    <div class="fatiar-menu">
+      <div>
+        <button class="btn btn-primary mb-2 fatiar-atualizar-files file-list-btn"><i class="fas fa-sync"></i> Recarregar</button>
+      </div>
+      <div class="file-select-container">
+        <button class="btn btn-secondary fatiar-btn-anterior file-list-btn"><i class="fas fa-arrow-left"></i></button>
+        <select class="fatiar-file-select"></select>
+        <button class="btn btn-secondary fatiar-btn-proximo file-list-btn"><i class="fas fa-arrow-right"></i></button>
+      </div>
+      <div class="f-pixels-menu">
+        Pixels: <input type="text" class="f-pixels-input" placeholder="300">
+      </div>
+      <div>
+        <button class="btn btn-danger generate-fatiar-btn"><i class="fas fa-pizza-slice"></i>Fatiar</button>
+        <div class="f-loading" style="display: none">Fatiando...</div>
+      </div>
+      <div>
+        <div class="f-crop-values">
+          <span class="input-group-text" id="basic-addon1">x1</span>
+          <button class="btn btn-secondary" id="down-fx1"><i class="fas fa-arrow-left"></i></button>
+          <button class="btn btn-secondary" id="up-fx1"><i class="fas fa-arrow-right"></i></button>
+          <span class="input-group-text" id="basic-addon1">x2</span>
+          <button class="btn btn-secondary" id="down-fx2"><i class="fas fa-arrow-left"></i></button>
+          <button class="btn btn-secondary" id="up-fx2"><i class="fas fa-arrow-right"></i></button>
+          <span class="input-group-text" id="basic-addon1">y1</span>
+          <button class="btn btn-secondary" id="down-fy1"><i class="fas fa-arrow-down"></i></button>
+          <button class="btn btn-secondary" id="up-fy1"><i class="fas fa-arrow-up"></i></button>
+          <span class="input-group-text" id="basic-addon1">y2</span>
+          <button class="btn btn-secondary" id="down-fy2"><i class="fas fa-arrow-down"></i></button>
+          <button class="btn btn-secondary" id="up-fy2"><i class="fas fa-arrow-up"></i></button>
+        </div>
+      </div>
+    </div>
+    <div class="fatiar-img-container"><img oncontextmenu="return false" src="" alt="" class="fatiar-img-preview"></div>
+  </div>
   <div class="loading"><h1>Carregando...</h1></div>
   <script src="index.js"></script>
   <script src="p5.js"></script>
+  <script src="fatiar.js"></script>
   <script src="crop.js"></script>
 </body>
 </html>

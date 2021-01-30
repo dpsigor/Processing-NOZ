@@ -5,6 +5,9 @@ processing-java --force --sketch="C:/Users/dpsig/dev/met-museum-bot/static/proce
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import com.hamoid.*;
+
+VideoExport videoExport;
 
 PImage venus;
 PImage teotokos;
@@ -32,7 +35,7 @@ void setup() {
   teotokos.resize(900,900);
   teotokos.loadPixels();
   // frameRate(10);
-  tiles = 100;
+  tiles = 200;
   tileSize = width/tiles;
 
   for (int y = 0; y < tiles; y++) {
@@ -57,6 +60,8 @@ void setup() {
     xList.clear();
     zList.clear();
   }
+  videoExport = new VideoExport(this);
+  videoExport.startMovie();
 }
 
 void draw() {
@@ -77,7 +82,7 @@ void draw() {
   box(900);
   noStroke();
 
-  translate(-width/2, 0, width/2);
+  translate(-width/2, 0, -width/2);
   for (int y = 0; y < tiles; y++) {
     // fill(0);
     // for (int x = 0; x < tiles; x++) {
@@ -111,12 +116,12 @@ void draw() {
     xList = xLists.get(y);
     zList = zLists.get(y);
 
-    fill(255, 0, 0);
+    fill(0, 0, 0);
     if(xList.size() > zList.size()) {
       for (int i = 0; i < xList.size(); ++i) {
         if (i > zList.size() - 1) { zIndex = 0; }
         push();
-        translate(xList.get(i) * tileSize, y * tileSize - height/2, -zList.get(zIndex) * tileSize);
+        translate(xList.get(i) * tileSize, y * tileSize - height/2, zList.get(zIndex) * tileSize);
         box(tileSize);
         pop();
         zIndex++;
@@ -125,18 +130,16 @@ void draw() {
       for (int i = 0; i < zList.size(); ++i) {
         if (i > xList.size() - 1) { xIndex = 0; }
         push();
-        translate(xList.get(xIndex) * tileSize, y*tileSize - height/2, -zList.get(i) * tileSize);
+        translate(xList.get(xIndex) * tileSize, y*tileSize - height/2, zList.get(i) * tileSize);
         box(tileSize);
         pop();
         xIndex++;
       }
     }
-
-    // xList.clear();
-    // zList.clear();
-
   }
+  videoExport.saveFrame();
   pop();
+  if (frameCount == 360) { videoExport.endMovie(); exit(); }
 }
 
 // static List<Integer> add_element(List<Integer> myList, int ele)

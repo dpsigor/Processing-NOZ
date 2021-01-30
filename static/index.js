@@ -24,12 +24,12 @@ const startBtn = document.querySelector('.start-btn');
 const abortBtn = document.querySelector('.abort-btn');
 // const runBtn = document.querySelector('.run-process');
 const routeProcessingBtn = document.querySelector('.routerprocessing');
+const routeFatiarBtn = document.querySelector('.routerfatiar');
 const routeDownloaderBtn = document.querySelector('.routerdownloader');
 const processingContainer = document.querySelector('.processingContainer');
 const loadingContainer = document.querySelector('.loading');
 const botContainer = document.querySelector('.botContainer');
-const imgContainer = document.querySelector('.img-container');
-const imgPreview = document.querySelector('.img-preview');
+const fatiarContainer = document.querySelector('.fatiarContainer');
 const colsInput = document.querySelector('.cols-input');
 const rowsInput = document.querySelector('.rows-input');
 const icolsInput = document.querySelector('.icols-input');
@@ -159,6 +159,7 @@ abortBtn.addEventListener('click', () => { onInterromper() });
 // runBtn.addEventListener('click', () => { onProcess() });
 routeProcessingBtn.addEventListener('click', () => onRouteProcessing());
 routeDownloaderBtn.addEventListener('click', () => onRouteDownloader());
+routeFatiarBtn.addEventListener('click', () => onRouteFatiar());
 colsInput.value = 1;
 rowsInput.value = 1;
 icolsInput.value = 1;
@@ -188,51 +189,28 @@ icolsInput.addEventListener('blur', () => {
   popup.setAttribute("class", "popuptext");
 })
 
-// Select de files
-document.querySelector('.atualizar-files').addEventListener('click', () => {
-  axios.get(apiUrl + 'filelist').then(res => {
-    const imgFilenames = res.data;
-    nFilesEmDisco = imgFilenames.length;
-    const fileSelect = document.querySelector('.file-select');
-    fileSelect.innerHTML = '';
-    fileSelect.addEventListener('change', () => {
-      imgPreview.setAttribute("src", `../files/${fileSelect.value}`);
-      const toDel = document.querySelector(".dynamic-crop");
-      if (toDel) { toDel.remove() };
-      x1 = 0; y1 = 0; x2 = 0; y2 = 0;
-    })
-    imgFilenames.forEach(filename => {
-      const opt = document.createElement('option');
-      opt.appendChild(document.createTextNode(filename));
-      opt.value = filename;
-      fileSelect.appendChild(opt);
-    });
-    document.querySelector('.atualizar-files').innerHTML = '<i class="fas fa-sync"></i> Recarregar';
-    imgPreview.setAttribute("src", `../files/${fileSelect.value}`);
-  });
-});
-document.querySelector('.btn-anterior').addEventListener('click', () => {
-  const fileSelect = document.querySelector('.file-select');
-  if (fileSelect.selectedIndex > 0) { fileSelect.selectedIndex = fileSelect.selectedIndex - 1 };
-  imgPreview.setAttribute("src", `../files/${fileSelect.value}`);
-});
-document.querySelector('.btn-proximo').addEventListener('click', () => {
-  const fileSelect = document.querySelector('.file-select');
-  if (fileSelect.selectedIndex < nFilesEmDisco - 1) { fileSelect.selectedIndex = fileSelect.selectedIndex + 1 };
-  imgPreview.setAttribute("src", `../files/${fileSelect.value}`);
-});
-
-
 // Router
 const onRouteProcessing = () => {
   routeProcessingBtn.setAttribute("class", "btn btn-primary routerprocessing");
+  routeFatiarBtn.setAttribute("class", "btn btn-secondary routerprocessing");
   routeDownloaderBtn.setAttribute("class", "btn btn-secondary routerdownloader");
   processingContainer.setAttribute("style", "display: grid");
+  fatiarContainer.setAttribute("style", "display: none");
   botContainer.setAttribute("style", "display: none");
 }
 const onRouteDownloader = () => {
   routeProcessingBtn.setAttribute("class", "btn btn-secondary routerprocessing");
+  routeFatiarBtn.setAttribute("class", "btn btn-secondary routerprocessing");
   routeDownloaderBtn.setAttribute("class", "btn btn-primary routerdownloader");
   processingContainer.setAttribute("style", "display: none");
+  fatiarContainer.setAttribute("style", "display: none");
   botContainer.setAttribute("style", "display: grid");
+}
+const onRouteFatiar = () => {
+  routeProcessingBtn.setAttribute("class", "btn btn-secondary routerprocessing");
+  routeFatiarBtn.setAttribute("class", "btn btn-primary routerprocessing");
+  routeDownloaderBtn.setAttribute("class", "btn btn-secondary routerdownloader");
+  processingContainer.setAttribute("style", "display: none");
+  fatiarContainer.setAttribute("style", "display: grid");
+  botContainer.setAttribute("style", "display: none");
 }

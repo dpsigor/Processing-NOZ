@@ -17,6 +17,7 @@ body {
 
 .loading,
 .processingContainer,
+.fatiarContainer,
 .botContainer {
   padding: 0.25rem;
 }
@@ -84,6 +85,7 @@ body {
   transition: 0.5s;
 }
 
+.fatiar-img-container,
 .img-container {
   max-width: 100%;
   position: relative;
@@ -91,12 +93,13 @@ body {
   margin-right: 0.25rem;
 }
 
+.fatiar-img-preview,
 .img-preview {
   width: 100%;
   height: auto;
   width: auto;
-  max-height: 600px;
-  max-width: 500px;
+  max-height: 80vh;
+  max-width: 45vw;
 }
 
 .imagens {
@@ -117,6 +120,32 @@ body {
 .file-select {
   padding: 0.5rem;
   width: 150px;
+}
+
+.fatiar-file-select {
+  padding: 0.5rem;
+  width: 80px;
+}
+
+.f-pixels-input {
+  padding: 0.5rem;
+  width: 50px;
+}
+
+.f-pixels-menu {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.fatiar-menu {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.f-loading {
+  font-size: 1.5rem;
 }
 
 .file-list-btn {
@@ -226,9 +255,11 @@ input[type='checkbox'] {
   margin-right: 0.33rem;
 }
 
+.f-crop-values,
 .crop-values {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
+  max-width: 400px;
 }
 
 .lado-max-container {
