@@ -18,7 +18,6 @@ let ladoMax;
 let scaling = 1;
 let sketch;
 
-let img;
 
 let originalW;
 let originalH;
@@ -35,6 +34,7 @@ let squareH;
 let flipVertical;
 
 const s = (p) => {
+  let img;
   p.setup = () => {
     p.createCanvas(squareW*cols*iCols, squareH*rows*iRows);
     p.frameRate(1);
@@ -88,7 +88,7 @@ const makeSketch = () => {
   if (sketch) { sketch.remove() }
   document.querySelector('.scale-res').innerHTML = '';
   originalImg = document.querySelector('.img-preview');
-  ladoMax = document.querySelector('.lado-max').value;
+  ladoMax = parseInt(document.querySelector('.lado-max').value);
   previewedFilename = document.querySelector('.file-select').value;
   originalW = originalImg.naturalWidth;
   originalH = originalImg.naturalHeight;

@@ -178,13 +178,41 @@
     <div id="catalogar-canvas"></div>
   </div>
   <div class="mosaicoContainer" style="display: grid">
-    HELLO
+    <div class="mosaico-menu">
+      <div>
+        <button class="btn btn-primary mb-2 mosaico-atualizar-files file-list-btn"><i class="fas fa-sync"></i> Recarregar</button>
+      </div>
+      <div class="file-select-container">
+        <div style="margin-right: 0.5rem">Imagem:</div>
+        <select class="mosaico-file-select"></select>
+      </div>
+      <div class="lado-max-container">
+        Lado máximo:<input type="number" class="mosaico-lado-max" placeholder="10000">
+      </div>
+      <div class="mosaico-folders-select">
+        <div>Selecionar pastas:</div>
+        <div class="file-select-container">
+          <select class="mosaico-folder-select"></select>
+          <button class="btn btn-secondary mosaico-folder-add">Add</button>
+        </div>
+      </div>
+      <div class="mosaico-folders-selecionados">
+      </div>
+      <div>
+        <button class="btn btn-primary make-mosaico-btn">Gerar mosaico</button>
+      </div>
+    </div>
+    <div class="imagens">
+      <div class="mosaico-img-container"><img oncontextmenu="return false" src="" alt="" class="mosaico-img-preview"></div>
+      <div id="mosaico-canvas"></div>
+    </div>
   </div>
   <div class="loading"><h1>Carregando...</h1></div>
   <script src="index.js"></script>
   <script src="mirror.js"></script>
   <script src="fatiar.js"></script>
   <script src="catalogar.js"></script>
+  <script src="mosaico.js"></script>
   <script src="crop.js"></script>
 </body>
 </html>
