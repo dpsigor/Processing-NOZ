@@ -15,4 +15,12 @@ module.exports = app => {
     })
   })
 
+  app.post('/api/savecatalogo', (req, res) => {
+    const folder = req.body.folder;
+    const info = JSON.stringify(req.body.info, null, 2);
+    fs.writeFile(path.join(__dirname, '..', 'output', 'modulos', folder, 'data.txt'), info, { encoding: 'utf-8' }, () => {
+      res.status(200).send('ok');
+    });
+  })
+
 }
