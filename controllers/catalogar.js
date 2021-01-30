@@ -28,7 +28,7 @@ module.exports = app => {
     const dados = {};
     folders.forEach(folder => {
       const info = fs.readFileSync(path.join(__dirname, '..', 'output', 'modulos', folder, 'data.txt'), { encoding: 'utf-8' });
-      dados[folder] = info;
+      dados[folder] = JSON.parse(info);
     })
     res.status(200).send(dados)
   })
