@@ -1,3 +1,6 @@
+catProgressBarContainer = document.querySelector('.cat-progressbar-container');
+catProgressBar = document.querySelector('.cat-progressbar');
+
 let catFolder;
 let catFilenames;
 let catSketch;
@@ -20,17 +23,21 @@ const catS = (p) => {
   p.draw = () => {
     p.image(catImg, -catImg.width*col/3, -catImg.height*row/3, catImg.width, catImg.height);
     p.loadPixels();
-    let r = 0;
-    let g = 0;
-    let b = 0;
+    let hue = 0;
+    let saturation = 0;
+    let brightness = 0;
     for (let i = 0; i < p.pixels.length/4; i++) {
-      r += p.pixels[(i+1)*4-4];
-      g += p.pixels[(i+1)*4-3];
-      b += p.pixels[(i+1)*4-2];
+      const r = p.pixels[(i+1)*4-4];
+      const g = p.pixels[(i+1)*4-3];
+      const b = p.pixels[(i+1)*4-2];
+      const c = p.color(r, g, b);
+      hue += p.floor(p.hue(c));
+      saturation += p.saturation(c);
+      brightness += p.brightness(c);
     }
-    const avgR = r/(p.pixels.length/4); values.push(parseInt(avgR));
-    const avgG = g/(p.pixels.length/4); values.push(parseInt(avgG));
-    const avgB = b/(p.pixels.length/4); values.push(parseInt(avgB));
+    const avgHue = r/(p.pixels.length/4); values.push(parseInt(avgHue));
+    const avgSat = g/(p.pixels.length/4); values.push(parseInt(avgSat));
+    const avgBrg = b/(p.pixels.length/4); values.push(parseInt(avgBrg));
     if (col < 2) { col++ }
     else if (row < 2) { row++; col = 0;}
     else {
@@ -46,13 +53,23 @@ const makeCatSketch = () => {
   setTimeout(() => {
     if (catSketch) { catSketch.remove() };
     if (fileIndex < catFilenames.length) {
+      catProgressBarContainer.setAttribute("style", "display: block");
+      updateCatProgressBar();
       catSketch = new p5(catS, 'catalogar-canvas');
     } else {
+      if (catSketch) { catSketch.remove() };
+      closeCatProgressBar();
       fileIndex = 0;
       saveCatDados();
     }
-  }, 100);
+  }, 1);
 }
+
+document.querySelector('.catalogar-btn').addEventListener('click', () => {
+  fileIndex = 0;
+  makeCatSketch();
+  document.querySelector('.catalogar-btn').setAttribute('style', 'display: none');
+})
 
 // Select de folders
 const loadCatalogFolderList = () => {
@@ -84,12 +101,6 @@ const loadFilenames = (foldername) => {
   axios.post(apiUrl + 'catalogarfilenames', { folder: foldername }).then(res => { catFilenames = res.data; });
 }
 
-document.querySelector('.catalogar-btn').addEventListener('click', () => {
-  fileIndex = 0;
-  makeCatSketch();
-  document.querySelector('.catalogar-btn').setAttribute('style', 'display: none');
-})
-
 const saveCatDados = () => {
   axios.post(apiUrl + 'savecatalogo', { folder: catFolder, info: catalogoObj })
   .then(res => {
@@ -100,4 +111,12 @@ const saveCatDados = () => {
     document.querySelector('.catalogar-btn').setAttribute('style', 'display: inline-block');
     alert(err);
     });
+}
+
+const updateCatProgressBar = () => {
+  catProgressBar.setAttribute("style", `width: ${fileIndex*100/(catFilenames.length - 1)}%`);
+}
+
+const closeCatProgressBar = () => {catProgressBarContainer.setAttribute("style", "display: none");
+  catProgressBar.setAttribute("style", `width: 0%`);
 }

@@ -73,6 +73,7 @@ body {
   font-size: 1.2rem;
 }
 
+.cat-progressbar-container,
 .progressbar-container {
   width: 100%;
   height: 25px;
@@ -80,6 +81,7 @@ body {
   margin-bottom: 1rem;
 }
 
+.cat-progressbar,
 .progressbar {
   height: 25px;
   background-color: blue;

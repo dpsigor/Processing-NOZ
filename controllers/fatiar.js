@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 
@@ -9,6 +10,7 @@ module.exports = app => {
     const rootFolder = path.join(__dirname, '..').split(/\/|\\/).join('/');
     try {
       await fatiar(rootFolder, groupname, filename, x1, y1, pixels, cols, rows);
+      fs.writeFileSync(path.join(rootFolder, 'output', 'modulos', groupname, 'original.txt'), filename);
       console.log('Tempo: ', new Date().valueOf() - start);
       res.status(200).send('aow');
     } catch (error) {
