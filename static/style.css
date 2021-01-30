@@ -142,6 +142,7 @@ body {
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
+  margin-bottom: 0.5rem;
 }
 
 .f-loading {

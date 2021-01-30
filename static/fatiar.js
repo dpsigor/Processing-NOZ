@@ -133,6 +133,10 @@ document.getElementById('up-fy2').addEventListener('click', () => {
   if (fy2 - fy1 > 2) { fy2 -= 1; updateFatiarGrid(); };
 })
 
+document.querySelector('.f-name').addEventListener('input', () => {
+  document.querySelector('.f-name').value = document.querySelector('.f-name').value.replace(/[^a-zA-Z0-9_-]/g, '');
+});
+
 document.querySelector('.f-pixels-input').addEventListener('input', () => {
   document.querySelector('.f-pixels-input').value = document.querySelector('.f-pixels-input').value.replace(/[^0-9]/g, '');
   fPixels = document.querySelector('.f-pixels-input').value;
@@ -146,17 +150,17 @@ document.querySelector('.f-pixels-input').addEventListener('blur', () => {
 })
 
 document.querySelector('.generate-fatiar-btn').addEventListener('click', () => {
-  if (document.querySelector('.fatiar-box')) {
+  if (document.querySelector('.fatiar-box') && document.querySelector('.f-name').value) {
     onFatiar();
     document.querySelector('.generate-fatiar-btn').setAttribute("style", "display: none");
     document.querySelector('.f-loading').setAttribute("style", "display: inline-block");
-  } else { alert("Pelo menos uma caixa vermelha") }
+  } else { alert("Pelo menos uma caixa vermelha, e Nome") }
 })
 
 const onFatiar = () => {
-  
     axios.post(apiUrl + 'fatiar', {
       filename: fatiarImg.getAttribute('src').split('/').pop(),
+      groupname: document.querySelector('.f-name').value,
       x1: Math.floor(fx1 * fatiarImg.naturalWidth / fatiarImg.clientWidth),
       y1: Math.floor(fy1 * fatiarImg.naturalHeight / fatiarImg.clientHeight),
       pixels: fPixels,
@@ -167,5 +171,9 @@ const onFatiar = () => {
       console.log(res.data);
       document.querySelector('.generate-fatiar-btn').setAttribute("style", "display: inline-block");
       document.querySelector('.f-loading').setAttribute("style", "display: none");
-      }).catch(err => alert('Aconteceu um erro (axios post)'));
+      }).catch(err => {
+        document.querySelector('.generate-fatiar-btn').setAttribute("style", "display: inline-block");
+        document.querySelector('.f-loading').setAttribute("style", "display: none");
+        alert('Aconteceu um erro (axios post)');
+      });
 }
