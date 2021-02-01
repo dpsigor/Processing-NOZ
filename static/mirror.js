@@ -1,4 +1,10 @@
 let originalImg = document.querySelector('.img-preview');
+
+const colsInput = document.querySelector('.cols-input');
+const rowsInput = document.querySelector('.rows-input');
+const icolsInput = document.querySelector('.icols-input');
+const irowsInput = document.querySelector('.irows-input');
+
 const previewProcessedBtn = document.querySelector('.preview-processed-img');
 // const saveProcessedBtn = document.querySelector('.save-processed-img');
 const loadingProcessBtn = document.querySelector('.loading-mirror-btn');

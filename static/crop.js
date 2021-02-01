@@ -1,4 +1,4 @@
-// const cropBtn = document.querySelector('.crop-btn');
+const loadingContainer = document.querySelector('.loading');
 const loadingCropBtn = document.querySelector('.loading-crop-btn');
 const x1downBtn = document.getElementById('down-x1');
 const x2downBtn = document.getElementById('down-x2');
