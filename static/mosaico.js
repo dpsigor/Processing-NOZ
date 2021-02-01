@@ -1,6 +1,7 @@
 let mosaicoImg = document.querySelector('.mosaico-img-preview');
 const mosaicoMsg = document.querySelector('.mosaico-msg');
 
+// let semRepetir = true;
 let mosaicoImgFilenames;
 let mosaicoSketch;
 let mScaling;
@@ -150,21 +151,19 @@ document.querySelector('.mosaico-folder-add').addEventListener('click', () => {
 });
 
 document.querySelector('.make-mosaico-btn').addEventListener('click', () => {
-  if (mx2 > mx1 && my2 > my1 && !!mRows) {
+  if (mx2 > mx1 && my2 > my1 && !!mRows && mSelectedFolders.length) {
     start = new Date().valueOf();
     mosaicoCalcular();
-    // document.querySelector('.make-mosaico-btn').setAttribute("style", "display: none");
+    document.querySelector('.make-mosaico-btn').setAttribute("style", "display: none");
   }
 });
 
 
 const loadModulosDados = async () => {
   return new Promise( (resolve, reject) => {
-    if (mSelectedFolders.length) {
-      axios.post(apiUrl + 'loadmodulosdados', { folders: mSelectedFolders })
-        .then(res => { modulosData = res.data; resolve(); })
-        .catch(err => { alert(err); reject() })
-    }
+    axios.post(apiUrl + 'loadmodulosdados', { folders: mSelectedFolders })
+      .then(res => { modulosData = res.data; resolve(); })
+      .catch(err => { alert(err); reject() })
   })
 }
 
@@ -185,9 +184,10 @@ const matchModules = () => {
     })
     selectedModules.push({ bestObjeto, bestModuleFilename });
   }
+  console.log(selectedModules);
   setTimeout(() => {
-    // makeFinalMosaic();
-  }, 100);
+    makeFinalMosaic();
+  }, 1000);
 }
 
 const dist3D = (x1, y1, z1, x2, y2, z2) => {
@@ -312,37 +312,36 @@ document.getElementById('m-down-cols').addEventListener('click', () => { mColsIn
 document.getElementById('m-up-cols').addEventListener('click', () => { mColsInput.value = parseInt(mColsInput.value) + 1; mCols = mColsInput.value; updateMosaicGrid(); });
 
 
-// const makeFinalMosaic = () => {
-//   if (mosaicoSketch) { mosaicoSketch.remove() };
-//   mosaicoSketch = new p5(mosaicoCalcularSketch, 'mosaico-canvas');
-//   document.querySelector('.make-mosaico-btn').setAttribute("style", "display: inline-block");
-// }
+let finalMosaicoSketch;
+let mModuloLado;
 
-// const mosaicoCalcularSketch = (p) => {
-//   let img;
-//   let modulos = [];
-//   p.preload = () => {
-//     for (let i = 0; i < selectedModules.length; i++) {
-//       let modulo = p.loadImage(`../output/modulos/${selectedModules[i]['bestObjeto']}/${selectedModules[i]['bestModuleFilename']}`);
-//       modulos.push(modulo);
-//     }
-//     img = p.loadImage(mosaicoImg.getAttribute('src'));
-//   }
+const makeFinalMosaic = () => {
+  mModuloLado = mLadoModuloInput.value;
+  if (finalMosaicoSketch) { finalMosaicoSketch.remove() }
+  finalMosaicoSketch = new p5(mosaicoFinal, 'final-mosaico-canvas');
+  document.querySelector('.make-mosaico-btn').setAttribute("style", "display: inline-block");
+}
+
+const mosaicoFinal = (p) => {
+  let modulos = [];
+  p.preload = () => {
+    for (let i = 0; i < selectedModules.length; i++) {
+      let modulo = p.loadImage(`../output/modulos/${selectedModules[i]['bestObjeto']}/${selectedModules[i]['bestModuleFilename']}`);
+      modulos.push(modulo);
+    }
+  }
   
-//   p.setup = () => {
-//     p.createCanvas(img.width*mScaling, img.height*mScaling);
-//   }
+  p.setup = () => {
+    p.createCanvas(mModuloLado*mCols, mModuloLado*mRows);
+  }
   
-//   p.draw = () => {
-//     let lado = 300 * mScaling; // TODO: LADO ESTÁ FIXO COM 300px...
-//     let rows = Math.floor(p.height/(lado));
-//     let cols = Math.floor(p.width/(lado));
-//     for (let i = 0; i < rows; i++) {
-//       for (let j = 0; j < cols; j++) {
-//         p.image(modulos[i*cols + j], j*lado, i*lado, lado, lado);
-//       }
-//     }
-//     mosaicoMsg.innerHTML = `Pronto! Demorou ${Math.floor((new Date().valueOf() - start)/1000)}s`;
-//     p.noLoop();
-//   }
-// }
+  p.draw = () => {
+    for (let i = 0; i < mRows; i++) {
+      for (let j = 0; j < mCols; j++) {
+        p.image(modulos[i*mCols + j], j*mModuloLado, i*mModuloLado, mModuloLado, mModuloLado);
+      }
+    }
+    mosaicoMsg.innerHTML = `Pronto! Demorou ${Math.floor((new Date().valueOf() - start)/1000)}s`;
+    p.noLoop();
+  }
+}
