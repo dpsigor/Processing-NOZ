@@ -1,11 +1,15 @@
 let mosaicoImg = document.querySelector('.mosaico-img-preview');
 const mosaicoMsg = document.querySelector('.mosaico-msg');
+const mColsInput = document.querySelector('.mosaico-cols-input');
+const mLadoModuloInput = document.querySelector('.mosaico-lado-modulo-input');
+
+mColsInput.value = 1;
+mLadoModuloInput.value = 300;
 
 let semRepetir = false;
 let mosaicoImgFilenames;
 let mosaicoSketch;
 let mScaling;
-document.querySelector('.mosaico-lado-max').value = 10000;
 let mSelectedFolders = [];
 let modulosData = {};
 let boxesValues = [];
@@ -95,7 +99,6 @@ const mLerOriginal = (p) => {
   }
   
   p.draw = () => {
-    p.colorMode(p.HSB, 255);
     p.image(img, -mx1, -my1, mosaicoImg.clientWidth, mosaicoImg.clientHeight);
 
     p.noFill();
@@ -118,22 +121,18 @@ const mLerOriginal = (p) => {
           for (let n = 0; n < 3; n++) {
             smallBox = pg2.get(n*lado/3, m*lado/3, lado/3, lado/3);
             smallBox.loadPixels();
-            let hue = 0;
-            let saturation = 0;
-            let brightness = 0;
+            let red = 0;
+            let green = 0;
+            let blue = 0;
             for (let k = 0; k < smallBox.pixels.length/4; k++) {
               let index = k*4;
-              const r = smallBox.pixels[index];
-              const g = smallBox.pixels[index+1];
-              const b = smallBox.pixels[index+2];
-              const c = p.color(r, g, b);
-              hue += p.floor(p.hue(c));
-              saturation += p.saturation(c);
-              brightness += p.brightness(c);
+              red += smallBox.pixels[index];
+              green += smallBox.pixels[index+1];
+              blue += smallBox.pixels[index+2];
             }
-            const avgHue = hue/(smallBox.pixels.length/4); values.push(parseInt(avgHue));
-            const avgSat = saturation/(smallBox.pixels.length/4); values.push(parseInt(avgSat));
-            const avgBrg = brightness/(smallBox.pixels.length/4); values.push(parseInt(avgBrg));
+            const avgRed = red/(smallBox.pixels.length/4); values.push(parseInt(avgRed));
+            const avgGreen = green/(smallBox.pixels.length/4); values.push(parseInt(avgGreen));
+            const avgBlue = blue/(smallBox.pixels.length/4); values.push(parseInt(avgBlue));
           }
         }
         boxesValues.push([...values]);
@@ -167,7 +166,6 @@ const matchModules = () => {
     })
     selectedModules.push({ bestObjeto, bestModuleFilename });
     if (semRepetir) { delete modulosData[bestObjeto][bestModuleFilename]; }
-    console.log(distance)
   }
   setTimeout(() => {
     makeFinalMosaic();
@@ -248,7 +246,8 @@ let mModuloLado;
 
 const makeFinalMosaic = () => {
   mModuloLado = mLadoModuloInput.value;
-  if (finalMosaicoSketch) { finalMosaicoSketch.remove() }
+  if (finalMosaicoSketch) { finalMosaicoSketch.remove() };
+  console.log(selectedModules);
   finalMosaicoSketch = new p5(mosaicoFinal, 'final-mosaico-canvas');
   document.querySelector('.make-mosaico-btn').setAttribute("style", "display: inline-block");
 }
