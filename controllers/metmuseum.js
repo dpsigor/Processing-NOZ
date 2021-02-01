@@ -16,6 +16,7 @@ module.exports = app => {
       const filename = req.body.objData.objectID + '_' + i.toString();
       const ext = '.' + imgUrl.split('.').pop().toLowerCase();
       if (!fs.existsSync(dir)) { fs.mkdirSync(dir) };
+      console.log(`Baixando ${filename}. ${i} de ${imgUrls.length}`)
       await downloadFile(imgUrl, dir + '/' + filename + ext);
       i++;
     }

@@ -105,7 +105,7 @@ const onDownload = () => {
       if (!interrompeu) { onDownload(); } else { statusMsgDiv.innerHTML = 'Downloads interrompidos com sucesso. Para voltar ao início, atualize a página (F5).' }
     });
   } else if (!terminouObjsData) {
-    setTimeout(() => { onDownload(); }, 5000);
+    setTimeout(() => { onDownload(); }, 200);
   } else {
     statusMsgDiv.innerHTML = 'Fim!';
     startBtn.innerHTML = 'Iniciar novo download'
