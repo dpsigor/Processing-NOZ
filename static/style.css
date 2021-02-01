@@ -143,8 +143,12 @@ body {
   grid-column: 1 / span 2;
 }
 
+.mosaico-sem-repetir-container {
+  grid-column: 3;
+}
+
 .gerar-mosaico-btn-container {
-  grid-column: 3 / span 2;
+  grid-column: 4 / span 1;
 }
 
 .mosaico-msg {

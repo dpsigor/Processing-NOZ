@@ -1,7 +1,7 @@
 let mosaicoImg = document.querySelector('.mosaico-img-preview');
 const mosaicoMsg = document.querySelector('.mosaico-msg');
 
-// let semRepetir = true;
+let semRepetir = false;
 let mosaicoImgFilenames;
 let mosaicoSketch;
 let mScaling;
@@ -87,36 +87,10 @@ const mLerOriginal = (p) => {
   }
 }
 
-const mosaicoCalcular = async () => {
-  try {
-    await loadModulosDados();
+const mosaicoCalcular = () => {
     if (mosaicoSketch) { mosaicoSketch.remove() };
-    // mLadoMax = parseInt(document.querySelector('.mosaico-lado-max').value);
     mosaicoSketch = new p5(mLerOriginal, 'mosaico-canvas');
-  } catch (error) {
-    console.log(error);
-    alert('Ocorreu um erro (mosaicoCalcular)')
-  }
 }
-
-const mosaicoLoadFilenameList = () => {
-  axios.get(apiUrl + 'filelist').then(res => {
-    mosaicoImgFilenames = res.data;
-    const mosaicoFileSelect = document.querySelector('.mosaico-file-select');
-    mosaicoFileSelect.innerHTML = '';
-    mosaicoFileSelect.addEventListener('change', () => {
-      mosaicoImg.setAttribute("src", `../files/${mosaicoFileSelect.value}`);
-    })
-    mosaicoImgFilenames.forEach(filename => {
-      const opt = document.createElement('option');
-      opt.appendChild(document.createTextNode(filename));
-      opt.value = filename;
-      mosaicoFileSelect.appendChild(opt);
-    });
-    mosaicoImg.setAttribute("src", `../files/${mosaicoFileSelect.value}`);
-  });
-}
-mosaicoLoadFilenameList();
 
 const mosaicoLoadFolderList = () => {
   axios.get(apiUrl + 'catalogarfolderlist').then(res => {
@@ -150,9 +124,14 @@ document.querySelector('.mosaico-folder-add').addEventListener('click', () => {
   }
 });
 
-document.querySelector('.make-mosaico-btn').addEventListener('click', () => {
+document.querySelector('.make-mosaico-btn').addEventListener('click', async () => {
   if (mx2 > mx1 && my2 > my1 && !!mRows && mSelectedFolders.length) {
     start = new Date().valueOf();
+    await loadModulosDados();
+    let totalBoxes = mCols * mRows;
+    let totalModulosCarregados = 0;
+    Object.keys(modulosData).forEach(objeto => { totalModulosCarregados += Object.keys(modulosData[objeto]).length; })
+    if (totalModulosCarregados < totalBoxes && semRepetir) { alert('Número insuficiente de módulos. Acrescente pastas'); return }
     mosaicoCalcular();
     document.querySelector('.make-mosaico-btn').setAttribute("style", "display: none");
   }
@@ -183,23 +162,12 @@ const matchModules = () => {
       })
     })
     selectedModules.push({ bestObjeto, bestModuleFilename });
+    if (semRepetir) { delete modulosData[bestObjeto][bestModuleFilename]; }
   }
   console.log(selectedModules);
   setTimeout(() => {
     makeFinalMosaic();
   }, 1000);
-}
-
-const dist3D = (x1, y1, z1, x2, y2, z2) => {
-  return Math.sqrt(Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2) + Math.pow((z1-z2), 2));
-}
-
-const distModulos = (modulo1, modulo2) => {
-  let dist = 0;
-  for (let i = 0; i < 9; i = i + 3) {
-    dist += dist3D(modulo1[i], modulo1[i+1], modulo1[i+2], modulo2[i], modulo2[i+1], modulo2[i+2]);
-  }
-  return dist;
 }
 
 document.querySelector('.mosaico-lado-max').addEventListener('input', () => { rowsInput.value = rowsInput.value.replace(/[^0-9]/g, ''); })
@@ -283,35 +251,6 @@ const makeMosaicGrid = () => {
   }
 }
 
-document.getElementById('down-mx1').addEventListener('click', () => {
-  if (mx2 - mx1 > 2 && mx1 > 0) { mx1 -= 1; updateMosaicGrid() };
-});
-document.getElementById('down-mx2').addEventListener('click', () => {
-  if (mx2 - mx1 > 2) { mx2 -= 1; updateMosaicGrid(); };
-});
-document.getElementById('down-my1').addEventListener('click', () => {
-  if (my2 - my1 > 2) { my1 += 1; updateMosaicGrid(); };
-});
-document.getElementById('down-my2').addEventListener('click', () => {
-  if (my2 - my1 > 2 && my2 < mosaicoImg.clientHeight) { my2 += 1; updateMosaicGrid(); };
-});
-document.getElementById('up-mx1').addEventListener('click', () => {
-  if (mx2 - mx1 > 2) { mx1 += 1; updateMosaicGrid(); };
-});
-document.getElementById('up-mx2').addEventListener('click', () => {
-  if (mx2 - mx1 > 2 && mx2 < mosaicoImg.clientWidth) { mx2 += 1; updateMosaicGrid() };
-});
-document.getElementById('up-my1').addEventListener('click', () => {
-  if (my2 - my1 > 2 && my1 > 0) { my1 -= 1; updateMosaicGrid(); };
-});
-document.getElementById('up-my2').addEventListener('click', () => {
-  if (my2 - my1 > 2) { my2 -= 1; updateMosaicGrid(); };
-});
-
-document.getElementById('m-down-cols').addEventListener('click', () => { mColsInput.value = parseInt(mColsInput.value) - 1; mCols = mColsInput.value; updateMosaicGrid(); });
-document.getElementById('m-up-cols').addEventListener('click', () => { mColsInput.value = parseInt(mColsInput.value) + 1; mCols = mColsInput.value; updateMosaicGrid(); });
-
-
 let finalMosaicoSketch;
 let mModuloLado;
 
@@ -345,3 +284,66 @@ const mosaicoFinal = (p) => {
     p.noLoop();
   }
 }
+
+
+
+const mosaicoLoadFilenameList = () => {
+  axios.get(apiUrl + 'filelist').then(res => {
+    mosaicoImgFilenames = res.data;
+    const mosaicoFileSelect = document.querySelector('.mosaico-file-select');
+    mosaicoFileSelect.innerHTML = '';
+    mosaicoFileSelect.addEventListener('change', () => {
+      mosaicoImg.setAttribute("src", `../files/${mosaicoFileSelect.value}`);
+    })
+    mosaicoImgFilenames.forEach(filename => {
+      const opt = document.createElement('option');
+      opt.appendChild(document.createTextNode(filename));
+      opt.value = filename;
+      mosaicoFileSelect.appendChild(opt);
+    });
+    mosaicoImg.setAttribute("src", `../files/${mosaicoFileSelect.value}`);
+  });
+}
+mosaicoLoadFilenameList();
+
+const dist3D = (x1, y1, z1, x2, y2, z2) => {
+  return Math.sqrt(Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2) + Math.pow((z1-z2), 2));
+}
+
+const distModulos = (modulo1, modulo2) => {
+  let dist = 0;
+  for (let i = 0; i < 9; i = i + 3) {
+    dist += dist3D(modulo1[i], modulo1[i+1], modulo1[i+2], modulo2[i], modulo2[i+1], modulo2[i+2]);
+  }
+  return dist;
+}
+
+document.getElementById('down-mx1').addEventListener('click', () => {
+  if (mx2 - mx1 > 2 && mx1 > 0) { mx1 -= 1; updateMosaicGrid() };
+});
+document.getElementById('down-mx2').addEventListener('click', () => {
+  if (mx2 - mx1 > 2) { mx2 -= 1; updateMosaicGrid(); };
+});
+document.getElementById('down-my1').addEventListener('click', () => {
+  if (my2 - my1 > 2) { my1 += 1; updateMosaicGrid(); };
+});
+document.getElementById('down-my2').addEventListener('click', () => {
+  if (my2 - my1 > 2 && my2 < mosaicoImg.clientHeight) { my2 += 1; updateMosaicGrid(); };
+});
+document.getElementById('up-mx1').addEventListener('click', () => {
+  if (mx2 - mx1 > 2) { mx1 += 1; updateMosaicGrid(); };
+});
+document.getElementById('up-mx2').addEventListener('click', () => {
+  if (mx2 - mx1 > 2 && mx2 < mosaicoImg.clientWidth) { mx2 += 1; updateMosaicGrid() };
+});
+document.getElementById('up-my1').addEventListener('click', () => {
+  if (my2 - my1 > 2 && my1 > 0) { my1 -= 1; updateMosaicGrid(); };
+});
+document.getElementById('up-my2').addEventListener('click', () => {
+  if (my2 - my1 > 2) { my2 -= 1; updateMosaicGrid(); };
+});
+
+document.getElementById('m-down-cols').addEventListener('click', () => { mColsInput.value = parseInt(mColsInput.value) - 1; mCols = mColsInput.value; updateMosaicGrid(); });
+document.getElementById('m-up-cols').addEventListener('click', () => { mColsInput.value = parseInt(mColsInput.value) + 1; mCols = mColsInput.value; updateMosaicGrid(); });
+
+document.getElementById('m-repetir').addEventListener('change', () => { semRepetir = document.getElementById('m-repetir').checked; })
