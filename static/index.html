@@ -16,8 +16,8 @@
   <div class="header">
     <button class="btn btn-secondary routerprocessing">Mirror</button>
     <button class="btn btn-secondary routerfatiar">Fatiar</button>
-    <button class="btn btn-secondary routercatalogar">Catalogar</button>
-    <button class="btn btn-primary routermosaico">Mosaico</button>
+    <button class="btn btn-primary routercatalogar">Catalogar</button>
+    <button class="btn btn-secondary routermosaico">Mosaico</button>
     <button class="btn btn-secondary routerdownloader">Downloader Bot</button>
   </div>
   <div class="botContainer" style="display: none">
@@ -159,7 +159,7 @@
     <div style="margin-bottom: 0.25rem;">Nome da pasta ao salvar: <input type="text" class="f-name"></div>
     <div class="fatiar-img-container"><img oncontextmenu="return false" src="" alt="" class="fatiar-img-preview"></div>
   </div>
-  <div class="catalogarContainer" style="display: none">
+  <div class="catalogarContainer" style="display: grid">
     <div class="catalogar-menu">
       <div>
         <button class="btn btn-primary mb-2 catalogar-atualizar-files file-list-btn"><i class="fas fa-sync"></i> Recarregar</button>
@@ -177,7 +177,7 @@
     </div>
     <div id="catalogar-canvas"></div>
   </div>
-  <div class="mosaicoContainer" style="display: grid">
+  <div class="mosaicoContainer" style="display: none">
     <div class="mosaico-menu">
       <div>
         <button class="btn btn-primary mb-2 mosaico-atualizar-files file-list-btn"><i class="fas fa-sync"></i> Recarregar</button>

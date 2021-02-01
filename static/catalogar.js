@@ -68,6 +68,7 @@ const makeCatSketch = () => {
 
 document.querySelector('.catalogar-btn').addEventListener('click', () => {
   fileIndex = 0;
+  catalogoObj = {};
   makeCatSketch();
   document.querySelector('.catalogar-btn').setAttribute('style', 'display: none');
 })

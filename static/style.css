@@ -268,9 +268,9 @@ body {
 
 .catalogar-menu {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 5fr;
   max-width: 100vw;
-  align-items: center;
+  align-items: flex-end;
 }
 
 .botoes {
