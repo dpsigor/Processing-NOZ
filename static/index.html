@@ -186,8 +186,34 @@
         <div style="margin-right: 0.5rem">Imagem:</div>
         <select class="mosaico-file-select"></select>
       </div>
-      <div class="lado-max-container">
+      <div class="lado-max-container" style="display: none">
         Lado máximo:<input type="number" class="mosaico-lado-max" placeholder="10000">
+      </div>
+      <div style="min-width: 105px">
+        <div style="margin-right: 0.5rem">Lado módulo:</div>
+          <input type="text" class="mosaico-lado-modulo-input" placeholder="300">px
+      </div>
+      <div>
+        <div style="margin-right: 0.5rem">Cols:</div>
+        <div class="grid3cols">
+          <input type="text" class="mosaico-cols-input" placeholder="1">
+          <button class="btn btn-secondary" id="m-down-cols"><i class="fas fa-arrow-down"></i></button>
+          <button class="btn btn-secondary" id="m-up-cols"><i class="fas fa-arrow-up"></i></button>
+        </div>
+      </div>
+      <div class="m-crop-values">
+        <span class="input-group-text" id="basic-addon1">x1</span>
+        <button class="btn btn-secondary" id="down-mx1"><i class="fas fa-arrow-left"></i></button>
+        <button class="btn btn-secondary" id="up-mx1"><i class="fas fa-arrow-right"></i></button>
+        <span class="input-group-text" id="basic-addon1">x2</span>
+        <button class="btn btn-secondary" id="down-mx2"><i class="fas fa-arrow-left"></i></button>
+        <button class="btn btn-secondary" id="up-mx2"><i class="fas fa-arrow-right"></i></button>
+        <span class="input-group-text" id="basic-addon1">y1</span>
+        <button class="btn btn-secondary" id="down-my1"><i class="fas fa-arrow-down"></i></button>
+        <button class="btn btn-secondary" id="up-my1"><i class="fas fa-arrow-up"></i></button>
+        <span class="input-group-text" id="basic-addon1">y2</span>
+        <button class="btn btn-secondary" id="down-my2"><i class="fas fa-arrow-down"></i></button>
+        <button class="btn btn-secondary" id="up-my2"><i class="fas fa-arrow-up"></i></button>
       </div>
       <div class="mosaico-folders-select">
         <div>Selecionar pastas:</div>
@@ -196,12 +222,12 @@
           <button class="btn btn-secondary mosaico-folder-add">Add</button>
         </div>
       </div>
-      <div class="mosaico-folders-selecionados">
-      </div>
-      <div>
+      <div class="gerar-mosaico-btn-container">
         <button class="btn btn-primary make-mosaico-btn">Gerar mosaico</button>
       </div>
       <div class="mosaico-msg"></div>
+      <div class="mosaico-folders-selecionados">
+      </div>
     </div>
     <div class="imagens">
       <div class="mosaico-img-container"><img oncontextmenu="return false" src="" alt="" class="mosaico-img-preview"></div>

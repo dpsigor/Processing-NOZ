@@ -169,3 +169,32 @@ document.querySelector('.btn-proximo').addEventListener('click', () => {
   if (fileSelect.selectedIndex < nFilesEmDisco - 1) { fileSelect.selectedIndex = fileSelect.selectedIndex + 1 };
   imgPreview.setAttribute("src", `../files/${fileSelect.value}`);
 });
+
+colsInput.value = 1;
+rowsInput.value = 1;
+icolsInput.value = 1;
+irowsInput.value = 1;
+colsInput.addEventListener('input', () => {
+  colsInput.value = colsInput.value.replace(/[^0-9]/g, '')
+  if (colsInput.value > 200) { alert(`Cuidado! Esse valor ${colsInput.value} é muito alto...`) }
+});
+rowsInput.addEventListener('input', () => {
+  rowsInput.value = rowsInput.value.replace(/[^0-9]/g, '');
+  if (rowsInput.value > 200) { alert(`Cuidado! Esse valor ${rowsInput.value} é muito alto...`) }
+});
+icolsInput.addEventListener('input', () => {
+  icolsInput.value = icolsInput.value.replace(/[^0-9]/g, '')
+  if (icolsInput.value > 200) { alert(`Cuidado! Esse valor ${icolsInput.value} é muito alto...`) }
+});
+irowsInput.addEventListener('input', () => {
+  irowsInput.value = irowsInput.value.replace(/[^0-9]/g, '');
+  if (irowsInput.value > 200) { alert(`Cuidado! Esse valor ${irowsInput.value} é muito alto...`) }
+});
+icolsInput.addEventListener('focus', () => {
+  const popup = document.getElementById("myPopup");
+  popup.setAttribute("class", "popuptext show");
+})
+icolsInput.addEventListener('blur', () => {
+  const popup = document.getElementById("myPopup");
+  popup.setAttribute("class", "popuptext");
+})
