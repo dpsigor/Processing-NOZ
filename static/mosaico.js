@@ -5,9 +5,7 @@ let semRepetir = false;
 let mosaicoImgFilenames;
 let mosaicoSketch;
 let mScaling;
-let mLadoMax;
 document.querySelector('.mosaico-lado-max').value = 10000;
-mLadoMax = 10000;
 let mSelectedFolders = [];
 let modulosData = {};
 let boxesValues = [];
@@ -28,17 +26,41 @@ document.querySelector('.mosaico-folder-add').addEventListener('click', () => {
       document.getElementById(`m_${ref}`).remove();
     })
     document.querySelector('.mosaico-folders-selecionados').append(newFolderBtn);
+    document.querySelector('.mosaico-folder-select').focus();
   }
 });
+document.querySelector('.mosaico-add-all-folders').addEventListener('click', () => {
+  mSelectedFolders = [];
+  const x = document.querySelector('.mosaico-folder-select');
+  document.querySelector('.mosaico-folders-selecionados').innerHTML = '';
+  for (let i = 0; i < x.length; i++) {
+    const ref = x.options[i].value;
+    mSelectedFolders.push(ref);
+    const newFolderBtn = document.createElement('button');
+    newFolderBtn.appendChild(document.createTextNode(ref));
+    newFolderBtn.setAttribute("class", "btn btn-danger");
+    newFolderBtn.setAttribute("id", `m_${ref}`);
+    newFolderBtn.addEventListener('click', () => {
+      mSelectedFolders = mSelectedFolders.filter(x => { return x != ref });
+      document.getElementById(`m_${ref}`).remove();
+    })
+    document.querySelector('.mosaico-folders-selecionados').append(newFolderBtn);
+    document.querySelector('.mosaico-folder-select').focus();
+  }
+})
 
 document.querySelector('.make-mosaico-btn').addEventListener('click', async () => {
   if (mx2 > mx1 && my2 > my1 && !!mRows && mSelectedFolders.length) {
+    if (mosaicoSketch) { mosaicoSketch.remove() };
+    if (finalMosaicoSketch) { finalMosaicoSketch.remove() };
+
+    mosaicoMsg.innerHTML = '';
     start = new Date().valueOf();
     await loadModulosDados();
     let totalBoxes = mCols * mRows;
     let totalModulosCarregados = 0;
     Object.keys(modulosData).forEach(objeto => { totalModulosCarregados += Object.keys(modulosData[objeto]).length; })
-    if (totalModulosCarregados < totalBoxes && semRepetir) { alert('Número insuficiente de módulos. Acrescente pastas'); return }
+    if (totalModulosCarregados < totalBoxes && semRepetir) { alert(`Número insuficiente de módulos (${totalModulosCarregados}) carregados. São necessários ${totalBoxes}. Acrescente pastas`); return }
     mosaicoCalcular();
     document.querySelector('.make-mosaico-btn').setAttribute("style", "display: none");
   }
@@ -53,7 +75,6 @@ const loadModulosDados = async () => {
 }
 
 const mosaicoCalcular = () => {
-  if (mosaicoSketch) { mosaicoSketch.remove() };
   mosaicoSketch = new p5(mLerOriginal, 'mosaico-canvas');
 }
 
@@ -119,7 +140,6 @@ const mLerOriginal = (p) => {
       }
     }
     mosaicoMsg.innerHTML = `Leu a imagem em ${Math.floor((new Date().valueOf() - start)/1000)}s.`;
-    console.log(boxesValues);
     img = '';
     pg = '';
     pg2 = '';
@@ -147,27 +167,12 @@ const matchModules = () => {
     })
     selectedModules.push({ bestObjeto, bestModuleFilename });
     if (semRepetir) { delete modulosData[bestObjeto][bestModuleFilename]; }
+    console.log(distance)
   }
-  console.log(selectedModules);
   setTimeout(() => {
     makeFinalMosaic();
   }, 1000);
 }
-
-
-
-
-document.querySelector('.mosaico-lado-max').addEventListener('input', () => { rowsInput.value = rowsInput.value.replace(/[^0-9]/g, ''); })
-const mColsInput = document.querySelector('.mosaico-cols-input');
-const mLadoModuloInput = document.querySelector('.mosaico-lado-modulo-input');
-mColsInput.value = 1;
-mLadoModuloInput.value = 300;
-mColsInput.addEventListener('input', () => { updateMosaicGrid(); });
-mColsInput.addEventListener('change', () => { updateMosaicGrid(); });
-mLadoModuloInput.addEventListener('input', () => {
-  mLadoModuloInput.value = mLadoModuloInput.value.replace(/[^0-9]/g, '');
-})
-
 
 let mCols = 1;
 let mRows = 0;
@@ -249,26 +254,22 @@ const makeFinalMosaic = () => {
 }
 
 const mosaicoFinal = (p) => {
-  let modulos = [];
-  p.preload = () => {
-    for (let i = 0; i < selectedModules.length; i++) {
-      let modulo = p.loadImage(`../output/modulos/${selectedModules[i]['bestObjeto']}/${selectedModules[i]['bestModuleFilename']}`);
-      modulos.push(modulo);
-    }
-  }
+  let mIndex;
+  let nModulos;
   
   p.setup = () => {
     p.createCanvas(mModuloLado*mCols, mModuloLado*mRows);
+    mIndex = 0;
+    nModulos = mCols*mRows;
+    console.log(`canvas: ${mModuloLado*mCols}px por ${mModuloLado*mRows}px`)
   }
   
   p.draw = () => {
-    for (let i = 0; i < mRows; i++) {
-      for (let j = 0; j < mCols; j++) {
-        p.image(modulos[i*mCols + j], j*mModuloLado, i*mModuloLado, mModuloLado, mModuloLado);
-      }
-    }
-    mosaicoMsg.innerHTML = `Pronto! Demorou ${Math.floor((new Date().valueOf() - start)/1000)}s`;
-    p.noLoop();
+    p.loadImage(`../output/modulos/${selectedModules[mIndex]['bestObjeto']}/${selectedModules[mIndex]['bestModuleFilename']}`, (img) => {
+      p.image(img, (mIndex%mCols)*mModuloLado, Math.floor(mIndex/mCols)*mModuloLado, mModuloLado, mModuloLado);
+      mIndex += 1;
+    });
+    if (mIndex > nModulos - 1) { p.noLoop(); }
   }
 }
 
