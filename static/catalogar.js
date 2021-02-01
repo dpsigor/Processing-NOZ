@@ -21,6 +21,7 @@ const catS = (p) => {
   }
   
   p.draw = () => {
+    p.colorMode(p.HSB, 255);
     p.image(catImg, -catImg.width*col/3, -catImg.height*row/3, catImg.width, catImg.height);
     p.loadPixels();
     let hue = 0;

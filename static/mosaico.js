@@ -11,12 +11,15 @@ let mSelectedFolders = [];
 let modulosData = {};
 let boxesValues = [];
 let selectedModules = [];
-let pg;
-
 let start;
 
 const mLerOriginal = (p) => {
   let img;
+  let pg;
+  let pg2;
+  let box;
+  let smallBox;
+
   p.preload = () => {
     img = p.loadImage(mosaicoImg.getAttribute('src'));
   }
@@ -27,8 +30,9 @@ const mLerOriginal = (p) => {
   }
   
   p.draw = () => {
-    p.background("#FF0000");
+    p.colorMode(p.HSB, 255);
     p.image(img, -mx1, -my1, mosaicoImg.clientWidth, mosaicoImg.clientHeight);
+
     p.noFill();
     for (let i = 0; i < mCols; i++) {
       for (let j = 0; j < mRows; j++) {
@@ -37,58 +41,60 @@ const mLerOriginal = (p) => {
     }
     boxesValues = [];
     let lado = p.floor(mGridLado * mScaling);
-    
-    for (let i = 0; i < Math.floor(p.height/(lado)); i++) {
-      for (let j = 0; j < Math.floor(p.width/(lado)); j++) {
-        let box = p.get(j * lado, i * lado, lado, lado);
+    pg = p.createGraphics(lado*mCols, lado*mRows);
+    pg.image(img, -mx1*mScaling, -my1*mScaling, img.width, img.height);
+    for (let i = 0; i < mRows; i++) {
+      for (let j = 0; j < mCols; j++) {
         let values = [];
+        box = pg.get(j*lado, i*lado, lado, lado);
+        pg2 = p.createGraphics(lado, lado);
+        pg2.image(box, 0, 0, lado, lado);
         for (let m = 0; m < 3; m++) {
           for (let n = 0; n < 3; n++) {
-            if (pg) { pg.remove() }
-            pg = p.createGraphics(lado/3, lado/3); 
-            pg.image(box, -lado*n/3, -lado*m/3, lado, lado);
-            pg.loadPixels();
+            smallBox = pg2.get(n*lado/3, m*lado/3, lado/3, lado/3);
+            smallBox.loadPixels();
             let hue = 0;
             let saturation = 0;
             let brightness = 0;
-            for (let i = 0; i < pg.pixels.length/4; i++) {
-              const r = pg.pixels[(i+1)*4-4];
-              const g = pg.pixels[(i+1)*4-3];
-              const b = pg.pixels[(i+1)*4-2];
+            for (let k = 0; k < smallBox.pixels.length/4; k++) {
+              let index = k*4;
+              const r = smallBox.pixels[index];
+              const g = smallBox.pixels[index+1];
+              const b = smallBox.pixels[index+2];
               const c = p.color(r, g, b);
               hue += p.floor(p.hue(c));
               saturation += p.saturation(c);
               brightness += p.brightness(c);
             }
-            const avgHue = hue/(pg.pixels.length/4); values.push(parseInt(avgHue));
-            const avgSat = saturation/(pg.pixels.length/4); values.push(parseInt(avgSat));
-            const avgBrg = brightness/(pg.pixels.length/4); values.push(parseInt(avgBrg));
+            const avgHue = hue/(smallBox.pixels.length/4); values.push(parseInt(avgHue));
+            const avgSat = saturation/(smallBox.pixels.length/4); values.push(parseInt(avgSat));
+            const avgBrg = brightness/(smallBox.pixels.length/4); values.push(parseInt(avgBrg));
           }
         }
         boxesValues.push([...values]);
-        
-        p.push();
-        p.translate(j*lado, i*lado);
-        p.rect(lado/2 - 2.5, lado/2 - 2.5, 5, 5);
-        p.pop();
       }
-      console.log(`${i+1} 'de' ${Math.floor(p.height/(lado))}`);
     }
     mosaicoMsg.innerHTML = `Leu a imagem em ${Math.floor((new Date().valueOf() - start)/1000)}s.`;
-    // matchModules();
+    console.log(boxesValues);
+    img = '';
+    pg = '';
+    pg2 = '';
+    box = '';
+    smallBox = '';
+    matchModules();
     p.noLoop();
   }
 }
 
-const makeMosaico = async () => {
+const mosaicoCalcular = async () => {
   try {
-    // await loadModulosDados();
+    await loadModulosDados();
     if (mosaicoSketch) { mosaicoSketch.remove() };
     // mLadoMax = parseInt(document.querySelector('.mosaico-lado-max').value);
     mosaicoSketch = new p5(mLerOriginal, 'mosaico-canvas');
   } catch (error) {
     console.log(error);
-    alert('Ocorreu um erro (makeMosaico)')
+    alert('Ocorreu um erro (mosaicoCalcular)')
   }
 }
 
@@ -146,7 +152,7 @@ document.querySelector('.mosaico-folder-add').addEventListener('click', () => {
 document.querySelector('.make-mosaico-btn').addEventListener('click', () => {
   if (mx2 > mx1 && my2 > my1 && !!mRows) {
     start = new Date().valueOf();
-    makeMosaico();
+    mosaicoCalcular();
     // document.querySelector('.make-mosaico-btn').setAttribute("style", "display: none");
   }
 });
@@ -195,41 +201,6 @@ const distModulos = (modulo1, modulo2) => {
   }
   return dist;
 }
-
-// const makeFinalMosaic = () => {
-//   if (mosaicoSketch) { mosaicoSketch.remove() };
-//   mosaicoSketch = new p5(makeMosaicoSketch, 'mosaico-canvas');
-//   document.querySelector('.make-mosaico-btn').setAttribute("style", "display: inline-block");
-// }
-
-// const makeMosaicoSketch = (p) => {
-//   let img;
-//   let modulos = [];
-//   p.preload = () => {
-//     for (let i = 0; i < selectedModules.length; i++) {
-//       let modulo = p.loadImage(`../output/modulos/${selectedModules[i]['bestObjeto']}/${selectedModules[i]['bestModuleFilename']}`);
-//       modulos.push(modulo);
-//     }
-//     img = p.loadImage(mosaicoImg.getAttribute('src'));
-//   }
-  
-//   p.setup = () => {
-//     p.createCanvas(img.width*mScaling, img.height*mScaling);
-//   }
-  
-//   p.draw = () => {
-//     let lado = 300 * mScaling; // TODO: LADO ESTÁ FIXO COM 300px...
-//     let rows = Math.floor(p.height/(lado));
-//     let cols = Math.floor(p.width/(lado));
-//     for (let i = 0; i < rows; i++) {
-//       for (let j = 0; j < cols; j++) {
-//         p.image(modulos[i*cols + j], j*lado, i*lado, lado, lado);
-//       }
-//     }
-//     mosaicoMsg.innerHTML = `Pronto! Demorou ${Math.floor((new Date().valueOf() - start)/1000)}s`;
-//     p.noLoop();
-//   }
-// }
 
 document.querySelector('.mosaico-lado-max').addEventListener('input', () => { rowsInput.value = rowsInput.value.replace(/[^0-9]/g, ''); })
 const mColsInput = document.querySelector('.mosaico-cols-input');
@@ -339,3 +310,39 @@ document.getElementById('up-my2').addEventListener('click', () => {
 
 document.getElementById('m-down-cols').addEventListener('click', () => { mColsInput.value = parseInt(mColsInput.value) - 1; mCols = mColsInput.value; updateMosaicGrid(); });
 document.getElementById('m-up-cols').addEventListener('click', () => { mColsInput.value = parseInt(mColsInput.value) + 1; mCols = mColsInput.value; updateMosaicGrid(); });
+
+
+// const makeFinalMosaic = () => {
+//   if (mosaicoSketch) { mosaicoSketch.remove() };
+//   mosaicoSketch = new p5(mosaicoCalcularSketch, 'mosaico-canvas');
+//   document.querySelector('.make-mosaico-btn').setAttribute("style", "display: inline-block");
+// }
+
+// const mosaicoCalcularSketch = (p) => {
+//   let img;
+//   let modulos = [];
+//   p.preload = () => {
+//     for (let i = 0; i < selectedModules.length; i++) {
+//       let modulo = p.loadImage(`../output/modulos/${selectedModules[i]['bestObjeto']}/${selectedModules[i]['bestModuleFilename']}`);
+//       modulos.push(modulo);
+//     }
+//     img = p.loadImage(mosaicoImg.getAttribute('src'));
+//   }
+  
+//   p.setup = () => {
+//     p.createCanvas(img.width*mScaling, img.height*mScaling);
+//   }
+  
+//   p.draw = () => {
+//     let lado = 300 * mScaling; // TODO: LADO ESTÁ FIXO COM 300px...
+//     let rows = Math.floor(p.height/(lado));
+//     let cols = Math.floor(p.width/(lado));
+//     for (let i = 0; i < rows; i++) {
+//       for (let j = 0; j < cols; j++) {
+//         p.image(modulos[i*cols + j], j*lado, i*lado, lado, lado);
+//       }
+//     }
+//     mosaicoMsg.innerHTML = `Pronto! Demorou ${Math.floor((new Date().valueOf() - start)/1000)}s`;
+//     p.noLoop();
+//   }
+// }
