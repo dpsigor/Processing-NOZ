@@ -14,21 +14,6 @@ let boxesValues = [];
 let selectedModules = [];
 let start;
 
-const mosaicoLoadFolderList = () => {
-  axios.get(apiUrl + 'catalogarfolderlist').then(res => {
-    const folderNames = res.data;
-    const mosaicoFolderSelect = document.querySelector('.mosaico-folder-select');
-    mosaicoFolderSelect.innerHTML = '';
-    folderNames.forEach(folder => {
-      const opt = document.createElement('option');
-      opt.appendChild(document.createTextNode(folder));
-      opt.value = folder;
-      mosaicoFolderSelect.appendChild(opt);
-    });
-  });
-}
-mosaicoLoadFolderList();
-
 document.querySelector('.mosaico-atualizar-files').addEventListener('click', () => { mosaicoLoadFilenameList(); mosaicoLoadFolderList(); });
 document.querySelector('.mosaico-folder-add').addEventListener('click', () => {
   const ref = document.querySelector('.mosaico-folder-select').value;
@@ -287,7 +272,20 @@ const mosaicoFinal = (p) => {
   }
 }
 
-
+const mosaicoLoadFolderList = () => {
+  axios.get(apiUrl + 'catalogarfolderlist').then(res => {
+    const folderNames = res.data;
+    const mosaicoFolderSelect = document.querySelector('.mosaico-folder-select');
+    mosaicoFolderSelect.innerHTML = '';
+    folderNames.forEach(folder => {
+      const opt = document.createElement('option');
+      opt.appendChild(document.createTextNode(folder));
+      opt.value = folder;
+      mosaicoFolderSelect.appendChild(opt);
+    });
+  });
+}
+mosaicoLoadFolderList();
 
 const mosaicoLoadFilenameList = () => {
   axios.get(apiUrl + 'filelist').then(res => {
@@ -308,16 +306,16 @@ const mosaicoLoadFilenameList = () => {
 }
 mosaicoLoadFilenameList();
 
-const dist3D = (x1, y1, z1, x2, y2, z2) => {
-  return Math.sqrt(Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2) + Math.pow((z1-z2), 2));
-}
-
 const distModulos = (modulo1, modulo2) => {
   let dist = 0;
   for (let i = 0; i < 9; i = i + 3) {
     dist += dist3D(modulo1[i], modulo1[i+1], modulo1[i+2], modulo2[i], modulo2[i+1], modulo2[i+2]);
   }
   return dist;
+}
+
+const dist3D = (x1, y1, z1, x2, y2, z2) => {
+  return Math.sqrt(Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2) + Math.pow((z1-z2), 2));
 }
 
 document.getElementById('down-mx1').addEventListener('click', () => {
