@@ -4,21 +4,29 @@ function setup() {
 }
 
 function draw() {
-  background(0);
+  // background(0);
+  // fill(255, 0, 0);
+  // rect(0, 0, 50, 50);
+  // translate(50, 0);
+  // fill(0, 255, 0);
+  // rect(0, 0, 50, 50);
+  // translate(50, 0);
+  // fill(0, 0, 255);
+  // rect(0, 0, 50, 50);
+  // translate(50, 0);
+  // fill(100, 150, 200);
+  // rect(0, 0, 50, 50);
+  // translate(50, 0);
+  // fill(255, 255, 255);
+  // rect(0, 0, 50, 50);
   fill(255, 0, 0);
-  rect(0, 0, 50, 50);
-  translate(50, 0);
+  rect(0, 0, 200, 200);
   fill(0, 255, 0);
-  rect(0, 0, 50, 50);
-  translate(50, 0);
+  rect(200, 0, 200, 200);
   fill(0, 0, 255);
-  rect(0, 0, 50, 50);
-  translate(50, 0);
-  fill(100, 150, 200);
-  rect(0, 0, 50, 50);
-  translate(50, 0);
-  fill(255, 255, 255);
-  rect(0, 0, 50, 50);
+  rect(0, 200, 200, 200);
+  fill(0, 255, 255);
+  rect(200, 200, 200, 200);
   loadPixels();
 }
 

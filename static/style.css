@@ -101,11 +101,10 @@ body {
 .fatiar-img-preview,
 .mosaico-img-preview,
 .img-preview {
-  width: 100%;
-  height: auto;
+  height: 75vh;
   width: auto;
-  max-height: 80vh;
-  max-width: 45vw;
+  max-height: 1000px;
+  max-width: auto;
 }
 
 .imagens {
@@ -125,6 +124,10 @@ body {
 .file-select {
   padding: 0.5rem;
   width: 150px;
+}
+
+.file-select-container > button {
+  transform: scale(1);
 }
 
 .mosaico-folders-selecionados {
@@ -157,7 +160,7 @@ body {
 
 .fatiar-file-select {
   padding: 0.5rem;
-  width: 80px;
+  width: 150px;
 }
 
 .mosaico-lado-modulo-input,
@@ -196,8 +199,7 @@ body {
 }
 
 .btn {
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
+  transform: scale(0.8);
 }
 
 .popup {
@@ -314,6 +316,12 @@ input[type='checkbox'] {
   max-width: 400px;
 }
 
+.m-crop-values > button,
+.f-crop-values > button,
+.crop-values > button {
+  transform: scale(1);
+}
+
 .lado-max-container {
   display: flex;
   flex-direction: row;
@@ -334,6 +342,10 @@ input[type='checkbox'] {
 
 .grid3cols > input {
   max-width: 100px;
+}
+
+.grid3cols > button {
+  transform: scale(1);
 }
 
 @media only screen and (max-width: 925px) {
