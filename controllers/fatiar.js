@@ -10,7 +10,7 @@ module.exports = app => {
     const rootFolder = path.join(__dirname, '..').split(/\/|\\/).join('/');
     try {
       await fatiar(rootFolder, groupname, filename, x1, y1, pixels, cols, rows);
-      if (!fs.existsSync(path.join(__dirname, '..', 'output', 'modulos'))) { fs.mkdir(path.join(__dirname, '..', 'output', 'modulos')) }
+      if (!fs.existsSync(path.join(__dirname, '..', 'output', 'modulos'))) { fs.mkdirSync(path.join(__dirname, '..', 'output', 'modulos')) }
       fs.writeFileSync(path.join(rootFolder, 'output', 'modulos', groupname, 'original.txt'), filename);
       console.log('Tempo: ', new Date().valueOf() - start);
       res.status(200).send('aow');
@@ -23,7 +23,7 @@ module.exports = app => {
 }
 
 const fatiar = (rootFolder, groupname, filename, x1, y1, pixels, cols, rows) => {
-  if (!fs.existsSync(path.join(__dirname, '..', 'static', 'files'))) { fs.mkdir(path.join(__dirname, '..', 'static', 'files')) }
+  if (!fs.existsSync(path.join(__dirname, '..', 'static', 'files'))) { fs.mkdirSync(path.join(__dirname, '..', 'static', 'files')) }
   const inputFilePath = path.join(rootFolder, 'static', 'files', filename).split(/\/|\\/).join('/');
   const outputPath = path.join(rootFolder, 'output', 'modulos', groupname).split(/\/|\\/).join('/');
   console.log(`processing-java --sketch=${rootFolder}/static/processing/fatiar --run ${inputFilePath} ${outputPath} ${x1} ${y1} ${pixels} ${cols} ${rows}`);
