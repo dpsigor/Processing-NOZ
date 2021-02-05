@@ -132,16 +132,6 @@ const makeSketch = () => {
 
 previewProcessedBtn.addEventListener('click', () => { makeSketch(); });
 
-
-// saveProcessedBtn.addEventListener('click', () => {
-//   saveProcessedBtn.setAttribute("style", "display: none");
-//   loadingProcessBtn.setAttribute("style", "display: block");
-//   if (document.querySelector(".dynamic-crop")) { document.querySelector(".dynamic-crop").remove(); }
-//   axios.post(apiUrl + 'processing/run', { previewedFilename, originalW, originalH, cols, rows, iCols, iRows, flipVertical })
-//     .then(res => { alert(res.data); console.log(res); saveProcessedBtn.setAttribute("style", "display: block"); loadingProcessBtn.setAttribute("style", "display: none"); })
-//     .catch(err => { console.log(err); alert(err.message); saveProcessedBtn.setAttribute("style", "display: block"); loadingProcessBtn.setAttribute("style", "display: none"); })
-// });
-
 // Select de files
 document.querySelector('.atualizar-files').addEventListener('click', () => {
   axios.get(apiUrl + 'filelist').then(res => {

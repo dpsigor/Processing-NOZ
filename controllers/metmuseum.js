@@ -9,6 +9,7 @@ module.exports = app => {
     imgUrls.push(req.body.objData.primaryImage);
     imgUrls.push(...req.body.objData.additionalImages);
     
+    if (!fs.existsSync(path.join(__dirname, '..', 'static', 'files'))) { fs.mkdir(path.join(__dirname, '..', 'static', 'files')) }
     const dir = path.join(__dirname, '..', 'static', 'files').split(/\/|\\/).join('/');
     
     let i = 0;
