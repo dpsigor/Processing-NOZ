@@ -5,13 +5,13 @@ module.exports = app => {
 
   app.get('/api/catalogarfolderlist', (req, res) => {
     fs.readdir(path.join(__dirname, '..', 'output', 'modulos'), (err, files) => {
-      res.status(200).send(files.filter(file => { return !file.startsWith('catalogado_') }));
+      res.status(200).send(files);
     })
   })
 
   app.post('/api/catalogarfilenames', (req, res) => {
     fs.readdir(path.join(__dirname, '..', 'output', 'modulos', req.body.folder), (err, files) => {
-      res.status(200).send(files.filter(file => !file.startsWith('catalogado_') && !file.endsWith('.txt')));
+      res.status(200).send(files);
     })
   })
 
