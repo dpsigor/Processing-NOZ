@@ -9,7 +9,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 require('./controllers/metmuseum')(app);
-require('./controllers/processing')(app);
 require('./controllers/general')(app);
 require('./controllers/fatiar')(app);
 require('./controllers/catalogar')(app);
