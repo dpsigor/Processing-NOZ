@@ -20,7 +20,5 @@ app.listen(port, () => {
 	console.log(`App rodando em http://localhost:${port}`);
 	if (!fs.existsSync(path.join(__dirname, 'static', 'files'))) { fs.mkdirSync(path.join(__dirname, 'static', 'files')) };
 	if (!fs.existsSync(path.join(__dirname, 'output'))) { fs.mkdirSync(path.join(__dirname, 'output')) };
-	if (!fs.existsSync(path.join(__dirname, 'output', 'modules'))) { fs.mkdirSync(path.join(__dirname, 'output', 'modulos')) };
+	if (!fs.existsSync(path.join(__dirname, 'output', 'modulos'))) { console.log('??????'); fs.mkdirSync(path.join(__dirname, 'output', 'modulos')) };
 });
-
-// if (!fs.existsSync(dir)) { fs.mkdirSync(dir) };
